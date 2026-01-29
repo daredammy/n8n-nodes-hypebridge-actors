@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifyEventnoire",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/eventnoire"
+      }
+    ]
+  },
+  "alias": [
+    "eventnoire",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}

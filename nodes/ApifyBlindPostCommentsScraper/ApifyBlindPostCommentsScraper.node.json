@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifyBlindPostCommentsScraper",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/blind-post-comments-scraper"
+      }
+    ]
+  },
+  "alias": [
+    "blind post comments scraper",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}

@@ -1,0 +1,95 @@
+import { ApifyClient } from 'apify-client';
+import { refactorProject } from './refactorProject';
+import { generateActorResources } from './actorSchemaConverter';
+import { setConfig } from './actorConfig';
+import * as readline from 'readline';
+import fs from 'fs';
+import path from 'path';
+
+// Targets (old names)
+const TARGET_CLASS_NAME = 'ApifyActorTemplate';
+const TARGET_PACKAGE_NAME = 'n8n-nodes-apify-actor-template';
+
+// Minimal inputs
+const X_PLATFORM_HEADER_ID = 'n8n';
+
+// Paths where properties should be updated
+const PROPERTIES_PATHS = [
+    `./nodes/${TARGET_CLASS_NAME}/${TARGET_CLASS_NAME}.properties.ts`,
+];
+
+// Paths where execute.ts should be updated
+const EXECUTE_PATHS = [
+    `./nodes/${TARGET_CLASS_NAME}/helpers/executeActor.ts`,
+];
+
+// Path where constants should be replaced
+const NODE_FILE_PATH = `./nodes/${TARGET_CLASS_NAME}/${TARGET_CLASS_NAME}.node.ts`;
+
+function askForActorId(): Promise<string> {
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+
+    return new Promise((resolve) => {
+        rl.question('👉 Please enter the ACTOR_ID: ', (answer) => {
+            rl.close();
+            resolve(answer.trim());
+        });
+    });
+}
+
+export async function setupProject() {
+    // Ask user for ACTOR_ID
+    const actorId = await askForActorId();
+
+    if (!actorId) {
+        throw new Error('❌ ACTOR_ID is required.');
+    }
+
+    // Create ApifyClient (token optional, required for private actors)
+    const client = new ApifyClient({
+        token: process.env.APIFY_TOKEN,
+    });
+
+    const actor = await client.actor(actorId).get();
+    if (!actor) {
+        throw new Error(`❌ Actor with id ${actorId} not found.`);
+    }
+
+    // Pre-check: Ensure target folder doesn't exist before we start
+    const targetClassName = actor.name
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join('');
+    const newActorDir = path.join('nodes', `Apify${targetClassName}`);
+
+    if (fs.existsSync(newActorDir)) {
+        throw new Error(`❌ Folder ${newActorDir} already exists. Please remove it before running the script again.`);
+    }
+
+    // Step 1: Fetch Actor info & replace placeholders
+    const values = await setConfig(actor, NODE_FILE_PATH, X_PLATFORM_HEADER_ID);
+
+    // Step 2: Generate n8n resources based on Actor input schema
+    await generateActorResources(
+        client,
+        actor,
+        values.ACTOR_ID,
+        PROPERTIES_PATHS,
+        EXECUTE_PATHS,
+        TARGET_CLASS_NAME,
+    );
+
+    // Step 3: Rename files/folders and handle icons
+    refactorProject(
+        TARGET_CLASS_NAME,
+        values.CLASS_NAME,
+        TARGET_PACKAGE_NAME,
+        values.PACKAGE_NAME,
+        values.ICON_FORMAT,
+    );
+
+    console.log('🎉 Project setup complete!');
+}

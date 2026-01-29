@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifyInfluencerEvaluationAgentInstagramTiktok",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/influencer-evaluation-agent-instagram-tiktok"
+      }
+    ]
+  },
+  "alias": [
+    "influencer evaluation agent instagram tiktok",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}

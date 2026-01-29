@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifyPoshVip",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/posh-vip"
+      }
+    ]
+  },
+  "alias": [
+    "posh vip",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifyEventbriteSearch",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/eventbrite-search"
+      }
+    ]
+  },
+  "alias": [
+    "eventbrite search",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}

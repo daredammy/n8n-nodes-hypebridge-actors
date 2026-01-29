@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifyEater",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/eater"
+      }
+    ]
+  },
+  "alias": [
+    "eater",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}
