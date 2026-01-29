@@ -105,7 +105,6 @@ Automatically collect new events daily and save to a spreadsheet.
 |-------------|--------|
 | 1.57.0+ | ✅ Tested |
 | 1.40.0+ | ✅ Should work |
-| < 1.40.0 | ⚠️ Not tested |
 
 ## Support
 
