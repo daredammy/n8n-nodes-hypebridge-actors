@@ -1,6 +1,6 @@
 # n8n-nodes-hypebridge-actors
 
-n8n community nodes for [Hypebridge](https://hypebridge.io) Apify actors — event scrapers, influencer marketing tools, and more.
+n8n community nodes for [Hypebridge](https://thehypebridge.com) Apify actors — event scrapers, influencer marketing tools, and more.
 
 ## Installation
 
