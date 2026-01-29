@@ -19,6 +19,10 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
 
+      # Upgrade npm to support OIDC trusted publishing
+      - name: Upgrade npm for OIDC support
+        run: npm install -g npm@latest
+
       - run: npm ci
       - run: npm run build
 
@@ -35,7 +39,7 @@ jobs:
             echo "changed=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Publish to npm
+      - name: Publish to npm (OIDC)
         if: steps.version.outputs.changed == 'true'
         run: npm publish --provenance --access public
 
