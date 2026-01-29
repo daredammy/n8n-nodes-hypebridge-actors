@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# Get commits that will be pushed (not yet on remote)
+REMOTE=${1:-origin}
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+# Check if remote branch exists
+if git ls-remote --exit-code --heads "$REMOTE" "$BRANCH" &>/dev/null; then
+  COMMITS=$(git log "$REMOTE/$BRANCH..HEAD" --pretty=format:"%s" 2>/dev/null)
+else
+  # New branch, get all commits
+  COMMITS=$(git log --pretty=format:"%s" -10 2>/dev/null)
+fi
+
+# Skip if no commits
+if [ -z "$COMMITS" ]; then
+  echo "No new commits to analyze"
+  exit 0
+fi
+
+echo "Analyzing commits for version bump..."
+echo "$COMMITS"
+echo ""
+
+# Ask Claude to decide version bump
+PROMPT="Based on these git commit messages, decide the semantic version bump needed.
+
+Commits:
+$COMMITS
+
+Rules:
+- Bug fixes, patches, minor changes = patch
+- New features, new nodes, new capabilities = minor
+- Breaking changes, API changes, major rewrites = major
+- Documentation only, chores, no functional change = none
+
+Respond with ONLY one word: patch, minor, major, or none"
+
+VERSION_TYPE=$(claude -p "$PROMPT" --model haiku 2>/dev/null | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
+
+echo "Claude suggests: $VERSION_TYPE"
+
+if [ "$VERSION_TYPE" = "none" ] || [ -z "$VERSION_TYPE" ]; then
+  echo "No version bump needed"
+  exit 0
+fi
+
+if [[ "$VERSION_TYPE" =~ ^(patch|minor|major)$ ]]; then
+  echo "Bumping version: $VERSION_TYPE"
+
+  # Bump version
+  NEW_VERSION=$(npm version "$VERSION_TYPE" --no-git-tag-version)
+
+  # Commit the version bump
+  git add package.json package-lock.json
+  git commit -m "chore: bump version to $NEW_VERSION"
+
+  echo "Version bumped to $NEW_VERSION"
+else
+  echo "Unexpected response from Claude: $VERSION_TYPE"
+  echo "Skipping version bump"
+fi
+
+exit 0
