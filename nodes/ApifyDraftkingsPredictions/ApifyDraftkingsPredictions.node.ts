@@ -27,7 +27,7 @@ export class ApifyDraftkingsPredictions implements INodeType {
 		name: ClassNameCamel,
 
 		// SNIPPET 2: Node icon
-		icon: 'file:logo.png',
+		icon: 'file:logo.svg',
 		group: ['transform'],
 		version: [1],
 		defaultVersion: 1,

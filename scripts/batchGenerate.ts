@@ -20,7 +20,6 @@ const ACTORS = [
   { id: 'glRc5oz3NacDyGQl3', name: 'influencer-discovery-agent-instagram-tiktok' },
 ];
 
-const TEMPLATE_DIR = path.resolve('./nodes/ApifyActorTemplate');
 const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors';
 const X_PLATFORM_HEADER_ID = 'n8n';
 
@@ -525,11 +524,12 @@ async function generateNode(client: ApifyClient, actorId: string, actorName: str
   fs.mkdirSync(nodeDir, { recursive: true });
   fs.mkdirSync(path.join(nodeDir, 'helpers'), { recursive: true });
 
-  // Copy logo
-  fs.copyFileSync(
-    path.join(TEMPLATE_DIR, 'logo.svg'),
-    path.join(nodeDir, 'logo.svg')
-  );
+  // Create placeholder logo (replace with actual logo after generation)
+  const placeholderSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" width="60" height="60">
+  <rect width="60" height="60" rx="8" fill="#00AAFF"/>
+  <text x="30" y="38" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="middle">A</text>
+</svg>`;
+  fs.writeFileSync(path.join(nodeDir, 'logo.svg'), placeholderSvg);
 
   // Get properties from actor schema
   const properties = await createActorAppSchemaForN8n(client, actor) as INodeProperties[];
