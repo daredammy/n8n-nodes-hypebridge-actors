@@ -8,6 +8,10 @@
     "n8n"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daredammy/n8n-nodes-hypebridge-actors"
+  },
   "author": {
     "name": "Hypebridge",
     "email": "hello@hypebridge.io"
