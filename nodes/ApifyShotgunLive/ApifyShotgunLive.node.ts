@@ -27,7 +27,7 @@ export class ApifyShotgunLive implements INodeType {
 		name: ClassNameCamel,
 
 		// SNIPPET 2: Node icon
-		icon: 'file:logo.svg',
+		icon: 'file:logo.png',
 		group: ['transform'],
 		version: [1],
 		defaultVersion: 1,
