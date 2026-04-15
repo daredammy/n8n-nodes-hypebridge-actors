@@ -15,6 +15,7 @@ const ACTORS = [
   { id: 'wMq6Lnj8aX8EVRRTa', name: 'influencer-evaluation-agent-instagram-tiktok' },
   { id: 'CuHJ7SN96LdHDGAgk', name: 'dice-fm' },
   { id: 'DKn2bTBmsX7hLjpHS', name: 'prekindle' },
+  { id: 'JFxrdGYYPZYL1Lree', name: 'luma-com-event-scraper' },
   { id: 'C73oJlNgIn3YtMqKz', name: 'shotgun-live' },
   { id: '44NPXm3vet7y8B0xY', name: 'posh-vip' },
   { id: 'glRc5oz3NacDyGQl3', name: 'influencer-discovery-agent-instagram-tiktok' },

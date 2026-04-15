@@ -48,6 +48,7 @@
       "dist/nodes/ApifyInfluencerEvaluationAgentInstagramTiktok/ApifyInfluencerEvaluationAgentInstagramTiktok.node.js",
       "dist/nodes/ApifyDiceFm/ApifyDiceFm.node.js",
       "dist/nodes/ApifyPrekindle/ApifyPrekindle.node.js",
+      "dist/nodes/ApifyLumaComEventScraper/ApifyLumaComEventScraper.node.js",
       "dist/nodes/ApifyShotgunLive/ApifyShotgunLive.node.js",
       "dist/nodes/ApifyPoshVip/ApifyPoshVip.node.js",
       "dist/nodes/ApifyInfluencerDiscoveryAgentInstagramTiktok/ApifyInfluencerDiscoveryAgentInstagramTiktok.node.js"
