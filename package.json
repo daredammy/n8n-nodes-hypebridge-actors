@@ -51,7 +51,8 @@
       "dist/nodes/ApifyLumaComEventScraper/ApifyLumaComEventScraper.node.js",
       "dist/nodes/ApifyShotgunLive/ApifyShotgunLive.node.js",
       "dist/nodes/ApifyPoshVip/ApifyPoshVip.node.js",
-      "dist/nodes/ApifyInfluencerDiscoveryAgentInstagramTiktok/ApifyInfluencerDiscoveryAgentInstagramTiktok.node.js"
+      "dist/nodes/ApifyInfluencerDiscoveryAgentInstagramTiktok/ApifyInfluencerDiscoveryAgentInstagramTiktok.node.js",
+      "dist/nodes/ApifyNfm/ApifyNfm.node.js"
     ]
   },
   "peerDependencies": {

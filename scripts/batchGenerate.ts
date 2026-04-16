@@ -19,6 +19,7 @@ const ACTORS = [
   { id: 'C73oJlNgIn3YtMqKz', name: 'shotgun-live' },
   { id: '44NPXm3vet7y8B0xY', name: 'posh-vip' },
   { id: 'glRc5oz3NacDyGQl3', name: 'influencer-discovery-agent-instagram-tiktok' },
+  { id: '8XMqU9wbHagBrsqVM', name: 'nfm' },
 ];
 
 const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors';
