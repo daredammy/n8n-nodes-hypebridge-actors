@@ -30,8 +30,6 @@ export function buildActorInput(
 		scrapeEventDetails: context.getNodeParameter('scrapeEventDetails', itemIndex),
 		// Max Events (maxEvents)
 		maxEvents: context.getNodeParameter('maxEvents', itemIndex),
-		// Disable Proxy (disableProxy)
-		disableProxy: context.getNodeParameter('disableProxy', itemIndex),
 	};
 }
 
@@ -99,14 +97,6 @@ export const actorProperties: INodeProperties[] = [
     "typeOptions": {
       "minValue": 0
     }
-  },
-  {
-    "displayName": "Disable Proxy",
-    "name": "disableProxy",
-    "description": "Disable proxy usage. Enable this if Eventbrite is blocking proxy traffic (you'll see 'Human Verification' or CAPTCHA pages)",
-    "required": false,
-    "default": false,
-    "type": "boolean"
   }
 ];
 
