@@ -132,9 +132,9 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Include reviews",
     "name": "includeReviews",
-    "description": "Collect recent review objects from profile pages. Requires profile detail extraction.",
+    "description": "Collect recent review objects whenever agency profile pages are fetched (Get agency details or email enrichment). Has no effect on listing-only runs.",
     "required": false,
-    "default": false,
+    "default": true,
     "type": "boolean"
   },
   {
