@@ -19,7 +19,7 @@ export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = 'OZnsMd2g4Ny9wKMgE' as string;
 
 export const DISPLAY_NAME = 'Goodfirms Agency Scraper - B2B Leads, Emails & Reviews' as string;
-export const DESCRIPTION = 'Run the Goodfirms Agency Scraper - B2B Leads, Emails & Reviews Actor on Apify' as string;
+export const DESCRIPTION = 'Extracts CRM-ready B2B agency leads from GoodFirms directory, category, country, and company profile pages. It can collect firmographics (hourly rate, team size, founding year, location), ratings and reviews, service focus, phone numbers, contact emails, and social profiles' as string;
 
 export class ApifyGoodfirmsAgencyScraper implements INodeType {
 	description: INodeTypeDescription = {

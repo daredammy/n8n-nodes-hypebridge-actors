@@ -48,8 +48,6 @@ export function buildActorInput(
 		maxReviewsPerAgency: context.getNodeParameter('maxReviewsPerAgency', itemIndex),
 		// Find emails on agency websites (enrichEmails)
 		enrichEmails: context.getNodeParameter('enrichEmails', itemIndex),
-		// Verify emails (verifyEmails)
-		verifyEmails: context.getNodeParameter('verifyEmails', itemIndex),
 		// Output format (outputFormat)
 		outputFormat: context.getNodeParameter('outputFormat', itemIndex),
 		// Sort by (sortBy)
@@ -154,15 +152,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Find emails on agency websites",
     "name": "enrichEmails",
-    "description": "If Goodfirms does not expose an email, crawl the agency website with strict caps to find contact emails.",
-    "required": false,
-    "default": false,
-    "type": "boolean"
-  },
-  {
-    "displayName": "Verify emails",
-    "name": "verifyEmails",
-    "description": "Run DNS/MX-based verification for discovered emails.",
+    "description": "If Goodfirms does not expose an email, run the Contact Details Scraper on the agency website. That scraper's pay-per-event usage is billed to your account on top of this actor's per-lead price.",
     "required": false,
     "default": false,
     "type": "boolean"
