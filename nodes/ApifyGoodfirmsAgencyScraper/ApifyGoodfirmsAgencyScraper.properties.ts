@@ -44,10 +44,10 @@ export function buildActorInput(
 		getAgencyDetails: context.getNodeParameter('getAgencyDetails', itemIndex),
 		// Include reviews (includeReviews)
 		includeReviews: context.getNodeParameter('includeReviews', itemIndex),
-		// Max reviews per agency (maxReviewsPerAgency)
-		maxReviewsPerAgency: context.getNodeParameter('maxReviewsPerAgency', itemIndex),
 		// Find emails on agency websites (enrichEmails)
 		enrichEmails: context.getNodeParameter('enrichEmails', itemIndex),
+		// Max reviews per agency (maxReviewsPerAgency)
+		maxReviewsPerAgency: context.getNodeParameter('maxReviewsPerAgency', itemIndex),
 		// Output format (outputFormat)
 		outputFormat: context.getNodeParameter('outputFormat', itemIndex),
 		// Sort by (sortBy)
@@ -132,9 +132,17 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Include reviews",
     "name": "includeReviews",
-    "description": "Collect recent review objects whenever agency profile pages are fetched (Get agency details or email enrichment). Has no effect on listing-only runs.",
+    "description": "Fetch each agency's profile to collect recent reviews, even when Get agency details is off. Reviews live on profile pages, so this prices the row as a detailed lead. Detail runs always include reviews; set Max reviews per agency to 0 to skip them.",
     "required": false,
-    "default": true,
+    "default": false,
+    "type": "boolean"
+  },
+  {
+    "displayName": "Find emails on agency websites",
+    "name": "enrichEmails",
+    "description": "If Goodfirms does not expose an email, run the Contact Details Scraper on the agency website. That scraper's pay-per-event usage is billed to your account on top of this actor's per-lead price.",
+    "required": false,
+    "default": false,
     "type": "boolean"
   },
   {
@@ -148,14 +156,6 @@ export const actorProperties: INodeProperties[] = [
       "minValue": 0,
       "maxValue": 25
     }
-  },
-  {
-    "displayName": "Find emails on agency websites",
-    "name": "enrichEmails",
-    "description": "If Goodfirms does not expose an email, run the Contact Details Scraper on the agency website. That scraper's pay-per-event usage is billed to your account on top of this actor's per-lead price.",
-    "required": false,
-    "default": false,
-    "type": "boolean"
   },
   {
     "displayName": "Output format",
