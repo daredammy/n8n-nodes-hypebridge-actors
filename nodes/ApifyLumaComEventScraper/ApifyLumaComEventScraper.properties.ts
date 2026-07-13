@@ -30,6 +30,12 @@ export function buildActorInput(
 		maxEvents: context.getNodeParameter('maxEvents', itemIndex),
 		// Scrape Full Event Details (scrapeEventDetails)
 		scrapeEventDetails: context.getNodeParameter('scrapeEventDetails', itemIndex),
+		// Scrape Full Guest Lists (scrapeGuests)
+		scrapeGuests: context.getNodeParameter('scrapeGuests', itemIndex),
+		// Scrape User Attended Events (scrapeUserAttendedEvents)
+		scrapeUserAttendedEvents: context.getNodeParameter('scrapeUserAttendedEvents', itemIndex),
+		// Scrape Event Posts (scrapePosts)
+		scrapePosts: context.getNodeParameter('scrapePosts', itemIndex),
 	};
 }
 
@@ -84,7 +90,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "maxEvents",
     "description": "Maximum number of events to scrape per start URL. Set to 0 for unlimited pagination.",
     "required": false,
-    "default": 100,
+    "default": 1000,
     "type": "number",
     "typeOptions": {
       "minValue": 0
@@ -94,6 +100,30 @@ export const actorProperties: INodeProperties[] = [
     "displayName": "Scrape Full Event Details",
     "name": "scrapeEventDetails",
     "description": "When enabled, fetches `/event/get` for each discovered event and returns description, ticket types, categories, sessions, registration questions, and other high-signal event metadata. Additional charges apply per detailed event pushed.",
+    "required": false,
+    "default": true,
+    "type": "boolean"
+  },
+  {
+    "displayName": "Scrape Full Guest Lists",
+    "name": "scrapeGuests",
+    "description": "When enabled, fetches the entire attendee list for each event, including guest names, social handles, and RSVP details. This can significantly increase run time and may require more proxies.",
+    "required": false,
+    "default": true,
+    "type": "boolean"
+  },
+  {
+    "displayName": "Scrape User Attended Events",
+    "name": "scrapeUserAttendedEvents",
+    "description": "When scraping user profiles, also fetch events the user has attended in addition to events they are hosting.",
+    "required": false,
+    "default": true,
+    "type": "boolean"
+  },
+  {
+    "displayName": "Scrape Event Posts",
+    "name": "scrapePosts",
+    "description": "Fetch the posts/insights attached to each event.",
     "required": false,
     "default": true,
     "type": "boolean"

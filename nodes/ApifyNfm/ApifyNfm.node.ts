@@ -19,7 +19,7 @@ export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = '8XMqU9wbHagBrsqVM' as string;
 
 export const DISPLAY_NAME = 'NFM Product Scraper' as string;
-export const DESCRIPTION = 'Run the NFM Product Scraper Actor on Apify' as string;
+export const DESCRIPTION = 'Extracts product listings from Nebraska Furniture Mart-https://www.nfm.com category, search, and sale pages. It can also enrich each product with brand, description, image gallery, GTIN, ratings, and availability from the product page when you enable detail mode.' as string;
 
 export class ApifyNfm implements INodeType {
 	description: INodeTypeDescription = {

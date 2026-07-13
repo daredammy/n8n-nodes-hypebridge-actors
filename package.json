@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-hypebridge-actors",
-  "version": "1.3.0",
+  "version": "1.0.0",
   "description": "n8n community nodes for Hypebridge Apify actors - event scrapers, influencer tools, and more",
   "keywords": [
     "n8n-community-node-package",
@@ -52,7 +52,8 @@
       "dist/nodes/ApifyShotgunLive/ApifyShotgunLive.node.js",
       "dist/nodes/ApifyPoshVip/ApifyPoshVip.node.js",
       "dist/nodes/ApifyInfluencerDiscoveryAgentInstagramTiktok/ApifyInfluencerDiscoveryAgentInstagramTiktok.node.js",
-      "dist/nodes/ApifyNfm/ApifyNfm.node.js"
+      "dist/nodes/ApifyNfm/ApifyNfm.node.js",
+      "dist/nodes/ApifyGoodfirmsAgencyScraper/ApifyGoodfirmsAgencyScraper.node.js"
     ]
   },
   "peerDependencies": {

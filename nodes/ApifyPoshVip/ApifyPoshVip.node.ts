@@ -18,7 +18,7 @@ export const ClassNameCamel = 'apifyPoshVip' as string;
 export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = '44NPXm3vet7y8B0xY' as string;
 
-export const DISPLAY_NAME = 'Posh VIP' as string;
+export const DISPLAY_NAME = 'Posh VIP Events' as string;
 export const DESCRIPTION = 'Scrape event data from posh.vip- the premier platform for nightlife, concerts, and party events. Extract comprehensive event information including tickets, pricing, venue details, and organizer data.' as string;
 
 export class ApifyPoshVip implements INodeType {

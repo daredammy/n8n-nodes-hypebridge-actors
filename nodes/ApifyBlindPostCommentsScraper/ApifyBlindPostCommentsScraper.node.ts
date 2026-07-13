@@ -18,7 +18,7 @@ export const ClassNameCamel = 'apifyBlindPostCommentsScraper' as string;
 export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = 'h4IM5lZDxLlFcQ3yx' as string;
 
-export const DISPLAY_NAME = 'Blind Post-Comments Scraper' as string;
+export const DISPLAY_NAME = 'Blind Post Scraper' as string;
 export const DESCRIPTION = 'Scrape posts, comments and discussions from teamblind.com, the anonymous professional community platform.' as string;
 
 export class ApifyBlindPostCommentsScraper implements INodeType {

@@ -40,8 +40,8 @@ export function buildActorInput(
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
 		// Max items (maxItems)
 		maxItems: context.getNodeParameter('maxItems', itemIndex),
-		// Use product detail pages (useProductDetails)
-		useProductDetails: context.getNodeParameter('useProductDetails', itemIndex),
+		// Include product details (includeProductDetails)
+		includeProductDetails: context.getNodeParameter('includeProductDetails', itemIndex),
 		// Proxy configuration (proxyConfiguration)
 		...getJsonParam(context, 'proxyConfiguration', itemIndex),
 		// Max concurrency (maxConcurrency)
@@ -102,18 +102,18 @@ export const actorProperties: INodeProperties[] = [
     "name": "maxItems",
     "description": "Maximum number of products to emit. Use 0 for no limit.",
     "required": false,
-    "default": 0,
+    "default": 20,
     "type": "number",
     "typeOptions": {
       "minValue": 0
     }
   },
   {
-    "displayName": "Use product detail pages",
-    "name": "useProductDetails",
+    "displayName": "Include product details",
+    "name": "includeProductDetails",
     "description": "Fetch each product detail page and enrich records with product copy, brand, images, GTIN, ratings, availability, and PDP price.",
     "required": false,
-    "default": false,
+    "default": true,
     "type": "boolean"
   },
   {

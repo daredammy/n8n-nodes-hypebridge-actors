@@ -5,23 +5,23 @@ import {
 	INodeTypeDescription,
 	NodeConnectionType,
 } from 'n8n-workflow';
-import { properties } from './ApifyLumaComEventScraper.properties';
+import { properties } from './ApifyGoodfirmsAgencyScraper.properties';
 import { runActor } from './helpers/executeActor';
 
 // SNIPPET 1: Actor schema constants
-export const ACTOR_ID = 'JFxrdGYYPZYL1Lree' as string;
+export const ACTOR_ID = 'OZnsMd2g4Ny9wKMgE' as string;
 
 export const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors' as string;
-export const CLASS_NAME = 'ApifyLumaComEventScraper' as string;
-export const ClassNameCamel = 'apifyLumaComEventScraper' as string;
+export const CLASS_NAME = 'ApifyGoodfirmsAgencyScraper' as string;
+export const ClassNameCamel = 'apifyGoodfirmsAgencyScraper' as string;
 
 export const X_PLATFORM_HEADER_ID = 'n8n' as string;
-export const X_PLATFORM_APP_HEADER_ID = 'JFxrdGYYPZYL1Lree' as string;
+export const X_PLATFORM_APP_HEADER_ID = 'OZnsMd2g4Ny9wKMgE' as string;
 
-export const DISPLAY_NAME = 'Luma Event Scraper' as string;
-export const DESCRIPTION = 'Scrapes event listings and optional full event details from Luma' as string;
+export const DISPLAY_NAME = 'Goodfirms Agency Scraper - B2B Leads, Emails & Reviews' as string;
+export const DESCRIPTION = 'Run the Goodfirms Agency Scraper - B2B Leads, Emails & Reviews Actor on Apify' as string;
 
-export class ApifyLumaComEventScraper implements INodeType {
+export class ApifyGoodfirmsAgencyScraper implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: DISPLAY_NAME,
 		name: ClassNameCamel,

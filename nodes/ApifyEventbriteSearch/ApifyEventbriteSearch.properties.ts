@@ -17,6 +17,11 @@ function getFixedCollectionParam(
 	return { [paramName]: result };
 }
 
+function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
+	const value = context.getNodeParameter(paramName, itemIndex);
+	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
+}
+
 export function buildActorInput(
 	context: IExecuteFunctions,
 	itemIndex: number,
@@ -30,6 +35,14 @@ export function buildActorInput(
 		scrapeEventDetails: context.getNodeParameter('scrapeEventDetails', itemIndex),
 		// Max Events (maxEvents)
 		maxEvents: context.getNodeParameter('maxEvents', itemIndex),
+		// Keyword (keyword)
+		...getOptionalParam(context, 'keyword', itemIndex),
+		// City (city)
+		...getOptionalParam(context, 'city', itemIndex),
+		// State (state)
+		...getOptionalParam(context, 'state', itemIndex),
+		// Country (country)
+		...getOptionalParam(context, 'country', itemIndex),
 	};
 }
 
@@ -57,7 +70,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Start URLs",
     "name": "startUrls",
-    "description": "Search/discovery URLs to start with.",
+    "description": "Eventbrite search/discovery URLs to scrape. Leave empty and use the Direct Search section below to construct a URL from keyword + location instead.",
     "required": false,
     "default": {},
     "type": "fixedCollection",
@@ -92,11 +105,43 @@ export const actorProperties: INodeProperties[] = [
     "name": "maxEvents",
     "description": "Maximum number of events to scrape. Set to 0 for unlimited.",
     "required": false,
-    "default": 0,
+    "default": 5,
     "type": "number",
     "typeOptions": {
       "minValue": 0
     }
+  },
+  {
+    "displayName": "Keyword",
+    "name": "keyword",
+    "description": "Search keyword used to construct an Eventbrite search URL (e.g. 'music', 'sunday-funday', 'funparty'). Used only when no Start URLs are provided.",
+    "required": false,
+    "default": "",
+    "type": "string"
+  },
+  {
+    "displayName": "City",
+    "name": "city",
+    "description": "City name (e.g. 'Dallas', 'Newark', 'New York').",
+    "required": false,
+    "default": "",
+    "type": "string"
+  },
+  {
+    "displayName": "State",
+    "name": "state",
+    "description": "State name or abbreviation (e.g. 'Texas', 'TX', 'New Jersey', 'NJ').",
+    "required": false,
+    "default": "",
+    "type": "string"
+  },
+  {
+    "displayName": "Country",
+    "name": "country",
+    "description": "Country code (e.g. 'US').",
+    "required": false,
+    "default": "",
+    "type": "string"
   }
 ];
 

@@ -93,20 +93,24 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Minimum Followers",
     "name": "minFollowers",
-    "description": "Minimum follower count (optional filter)",
+    "description": "Minimum follower count (optional filter). When Maximum Followers is also set, the range must span at least 50,000 followers. Narrower ranges are automatically expanded by increasing Maximum Followers.",
     "required": false,
     "default": 0,
     "type": "number",
-    "typeOptions": {}
+    "typeOptions": {
+      "minValue": 0
+    }
   },
   {
     "displayName": "Maximum Followers",
     "name": "maxFollowers",
-    "description": "Maximum follower count (optional filter)",
+    "description": "Maximum follower count (optional filter). When Minimum Followers is also set, the range must span at least 50,000 followers. If needed, this value is automatically increased before discovery starts.",
     "required": false,
     "default": 0,
     "type": "number",
-    "typeOptions": {}
+    "typeOptions": {
+      "minValue": 0
+    }
   },
   {
     "displayName": "Location",

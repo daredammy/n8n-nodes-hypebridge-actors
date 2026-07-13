@@ -57,7 +57,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Start URLs",
     "name": "startUrls",
-    "description": "City, venue, or event URLs from Shotgun.live to scrape. City pages (e.g., https://shotgun.live/en/cities/new-york) will discover all events in that city. Venue pages (e.g., https://shotgun.live/en/venues/volange) will discover all events at that venue. Event pages (e.g., https://shotgun.live/en/events/event-name) will scrape that specific event.",
+    "description": "City, venue, or event URLs from Shotgun.live to scrape. City pages (e.g., https://shotgun.live/en/cities/new-york) will discover all events in that city. City URLs also support optional genre and/or date filters as path segments: /en/cities/{city}/{genre}/{YYYY-MM-DD} (use '-' as the genre placeholder for date-only, e.g. /en/cities/paris/-/2026-07-10). Genre slugs: afro, dance, downtempo, experimental, hard-music, hip-hop, house, industrial, instrumental, latino-brazilian, metal, pop, reggae-dub, rock, techno, trance, uk. Venue pages (e.g., https://shotgun.live/en/venues/volange) will discover all events at that venue. Event pages (e.g., https://shotgun.live/en/events/event-name) will scrape that specific event.",
     "required": true,
     "default": {},
     "type": "fixedCollection",
