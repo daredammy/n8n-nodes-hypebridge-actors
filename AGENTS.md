@@ -4,7 +4,7 @@
 
 This is a **generator repository** that creates n8n community nodes from Apify Actors. It has two main components:
 
-1. **Template Files** (`nodes/ApifyActorTemplate/`) - Blueprint for generated nodes
+1. **Template Files** (`nodes/ApifyFindEvents/`) - Blueprint for generated nodes
 2. **Generator Scripts** (`scripts/`) - Code that creates new nodes from the template
 
 **Key Concept**: This is NOT a static codebase. When you run `npm run create-actor-app`, the scripts copy the template, fetch an Actor's schema from Apify, and generate a new node with proper naming and properties.
@@ -25,18 +25,18 @@ npm run lint              # Check code quality
 
 ## Part 1: Template Files (What Gets Copied)
 
-Location: `nodes/ApifyActorTemplate/`
+Location: `nodes/ApifyFindEvents/`
 
 These files serve as the blueprint for all generated nodes:
 
 ### Node Definition
-- **`ApifyActorTemplate.node.ts`** - Main node class implementing `INodeType`
+- **`ApifyFindEvents.node.ts`** - Main node class implementing `INodeType`
   - Defines node metadata (name, icon, credentials)
   - Contains `execute()` method that runs the Actor
   - Uses placeholders like `$$ACTOR_ID`, `$$CLASS_NAME` that get replaced
 
 ### Properties
-- **`ApifyActorTemplate.properties.ts`** - UI field definitions
+- **`ApifyFindEvents.properties.ts`** - UI field definitions
   - Gets **completely regenerated** during setup (not copied as-is)
   - Defines what fields users see in n8n UI
 
@@ -55,7 +55,7 @@ These files serve as the blueprint for all generated nodes:
 - **`helpers/hooks.ts`** - n8n lifecycle hooks
 
 ### Metadata
-- **`ApifyActorTemplate.node.json`** - Node categories and aliases
+- **`ApifyFindEvents.node.json`** - Node categories and aliases
 - **`properties.json`** - Cached generated properties
 
 ### Icons
@@ -97,7 +97,7 @@ Location: `scripts/`
 | object | - | json | JSON editor |
 
 **`refactorProject.ts`** - Renames files and updates imports:
-- Renames `ApifyActorTemplate/` → `ApifyActorName/`
+- Renames `ApifyFindEvents/` → `ApifyActorName/`
 - Updates all class names and imports
 - Updates `package.json` name
 
@@ -120,7 +120,7 @@ setConfig() → Generate placeholder values
       ↓
 generateActorResources() → Convert Apify schema to n8n properties
       ↓
-refactorProject() → Rename ApifyActorTemplate → ApifyInstagramScraper
+refactorProject() → Rename ApifyFindEvents → ApifyInstagramScraper
       ↓
 npm run build → Compile TypeScript
       ↓
@@ -178,9 +178,9 @@ Search for `SNIPPET` in generated code to find these:
 
 | File | Purpose |
 |------|---------|
-| `nodes/ApifyActorTemplate/ApifyActorTemplate.node.ts` | Main node template |
-| `nodes/ApifyActorTemplate/helpers/executeActor.ts` | Actor execution logic |
-| `nodes/ApifyActorTemplate/helpers/genericFunctions.ts` | API utilities |
+| `nodes/ApifyFindEvents/ApifyFindEvents.node.ts` | Main node template |
+| `nodes/ApifyFindEvents/helpers/executeActor.ts` | Actor execution logic |
+| `nodes/ApifyFindEvents/helpers/genericFunctions.ts` | API utilities |
 | `scripts/setupProject.ts` | Main orchestrator |
 | `scripts/actorSchemaConverter.ts` | Schema conversion |
 | `scripts/actorConfig.ts` | Placeholder generation |
@@ -200,16 +200,16 @@ npm run build
 ```
 
 ### Modify Template Behavior
-Edit files in `nodes/ApifyActorTemplate/` - changes will apply to all future generated nodes.
+Edit files in `nodes/ApifyFindEvents/` - changes will apply to all future generated nodes.
 
 ### Change Schema Conversion Logic
 Edit `scripts/actorSchemaConverter.ts` → modify `getPropsForTypeN8n()` function.
 
 ### Modify Polling Behavior
-Edit `nodes/ApifyActorTemplate/helpers/genericFunctions.ts` → modify `pollRunStatus()` function.
+Edit `nodes/ApifyFindEvents/helpers/genericFunctions.ts` → modify `pollRunStatus()` function.
 
 ### Add Custom API Headers
-Edit `nodes/ApifyActorTemplate/helpers/genericFunctions.ts` → add headers in `apiRequest()` function.
+Edit `nodes/ApifyFindEvents/helpers/genericFunctions.ts` → add headers in `apiRequest()` function.
 
 ---
 
@@ -218,13 +218,13 @@ Edit `nodes/ApifyActorTemplate/helpers/genericFunctions.ts` → add headers in `
 ### What Gets Regenerated vs. Copied
 
 **Regenerated (not direct copies):**
-- `ApifyActorTemplate.properties.ts` - Completely rebuilt from Actor's input schema
+- `ApifyFindEvents.properties.ts` - Completely rebuilt from Actor's input schema
 - `properties.json` - Generated from converted schema
 
 **Copied & modified (placeholders replaced):**
-- `ApifyActorTemplate.node.ts` - Class names and constants updated
+- `ApifyFindEvents.node.ts` - Class names and constants updated
 - All helper files - Names and imports updated
-- `ApifyActorTemplate.node.json` - Display name updated
+- `ApifyFindEvents.node.json` - Display name updated
 
 ### Template vs. Script Separation
 
