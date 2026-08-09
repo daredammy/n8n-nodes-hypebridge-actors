@@ -70,7 +70,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Start URLs",
     "name": "startUrls",
-    "description": "Eventbrite search/discovery URLs to scrape. Leave empty and use the Direct Search section below to construct a URL from keyword + location instead.",
+    "description": "Eventbrite search/discovery URLs to scrape. Direct Search fields replace the prefilled nationwide URL; custom Start URLs take precedence.",
     "required": false,
     "default": {},
     "type": "fixedCollection",
@@ -114,7 +114,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Keyword",
     "name": "keyword",
-    "description": "Search keyword used to construct an Eventbrite search URL (e.g. 'music', 'sunday-funday', 'funparty'). Used only when no Start URLs are provided.",
+    "description": "Search keyword used to construct an Eventbrite search URL (e.g. 'music', 'sunday-funday', 'funparty'). Replaces the prefilled nationwide URL, but not a custom Start URL.",
     "required": false,
     "default": "",
     "type": "string"

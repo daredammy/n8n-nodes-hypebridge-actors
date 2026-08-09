@@ -38,7 +38,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Influencer Handle",
     "name": "influencerHandle",
-    "description": "The Instagram or TikTok handle of the influencer to evaluate (e.g., 'natgeo' or '@natgeo'). The @ symbol is optional.",
+    "description": "The Instagram or TikTok handle of the influencer to evaluate (e.g., 'natgeo' or '@natgeo'). The @ symbol is optional, and a full profile URL such as 'https://www.instagram.com/natgeo' is also accepted.",
     "required": true,
     "default": "natgeo",
     "type": "string"

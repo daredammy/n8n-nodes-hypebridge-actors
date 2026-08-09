@@ -90,7 +90,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "maxEvents",
     "description": "Maximum number of events to scrape per start URL. Set to 0 for unlimited pagination.",
     "required": false,
-    "default": 1000,
+    "default": 25,
     "type": "number",
     "typeOptions": {
       "minValue": 0
