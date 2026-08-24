@@ -53,7 +53,8 @@
       "dist/nodes/ApifyPoshVip/ApifyPoshVip.node.js",
       "dist/nodes/ApifyInfluencerDiscoveryAgentInstagramTiktok/ApifyInfluencerDiscoveryAgentInstagramTiktok.node.js",
       "dist/nodes/ApifyNfm/ApifyNfm.node.js",
-      "dist/nodes/ApifyGoodfirmsAgencyScraper/ApifyGoodfirmsAgencyScraper.node.js"
+      "dist/nodes/ApifyGoodfirmsAgencyScraper/ApifyGoodfirmsAgencyScraper.node.js",
+      "dist/nodes/ApifyFilmfreewayFestivalScraper/ApifyFilmfreewayFestivalScraper.node.js"
     ]
   },
   "peerDependencies": {

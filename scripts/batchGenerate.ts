@@ -21,6 +21,7 @@ const ACTORS = [
   { id: 'glRc5oz3NacDyGQl3', name: 'influencer-discovery-agent-instagram-tiktok' },
   { id: '8XMqU9wbHagBrsqVM', name: 'nfm' },
   { id: 'OZnsMd2g4Ny9wKMgE', name: 'goodfirms-agency-scraper' },
+  { id: 'Frgkvw77h8aJOCL2D', name: 'filmfreeway-festival-scraper' },
 ];
 
 const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors';
@@ -40,6 +41,7 @@ function toCamelCase(className: string): string {
 interface BuildResult {
   paramAssignments: string[];
   usesFixedCollection: boolean;
+  usesDate: boolean;
   usesJson: boolean;
   usesOptional: boolean;
 }
@@ -47,6 +49,7 @@ interface BuildResult {
 function buildParameterAssignments(properties: INodeProperties[]): BuildResult {
   const paramAssignments: string[] = [];
   let usesFixedCollection = false;
+  let usesDate = false;
   let usesJson = false;
   let usesOptional = false;
 
@@ -69,7 +72,11 @@ function buildParameterAssignments(properties: INodeProperties[]): BuildResult {
       paramAssignments.push(
         `${comment}\n		${prop.name}: context.getNodeParameter('${prop.name}', itemIndex),`
       );
-    } else if (prop.type === 'dateTime' || (prop.type === 'string' && !prop.required)) {
+    } else if (prop.type === 'dateTime') {
+      usesDate = true;
+      paramAssignments.push(`${comment}
+		...getDateParam(context, '${prop.name}', itemIndex),`);
+    } else if (prop.type === 'string' && !prop.required) {
       usesOptional = true;
       paramAssignments.push(`${comment}
 		...getOptionalParam(context, '${prop.name}', itemIndex),`);
@@ -80,7 +87,7 @@ function buildParameterAssignments(properties: INodeProperties[]): BuildResult {
     }
   }
 
-  return { paramAssignments, usesFixedCollection, usesJson, usesOptional };
+  return { paramAssignments, usesFixedCollection, usesDate, usesJson, usesOptional };
 }
 
 function generateNodeTs(className: string, actorId: string, displayName: string, description: string): string {
@@ -403,6 +410,7 @@ function generatePropertiesTs(
   properties: INodeProperties[],
   paramAssignments: string[],
   usesFixedCollection: boolean,
+  usesDate: boolean,
   usesJson: boolean,
   usesOptional: boolean
 ): string {
@@ -424,6 +432,15 @@ function getFixedCollectionParam(
 		result = result.map((item: any) => item.value);
 	}
 	return { [paramName]: result };
+}
+` : '';
+
+  const dateFn = usesDate ? `
+function getDateParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
+	const value = context.getNodeParameter(paramName, itemIndex);
+	if (value === undefined || value === null || value === '') return {};
+	const date = String(value).slice(0, 10);
+	return { [paramName]: date };
 }
 ` : '';
 
@@ -449,7 +466,7 @@ function getOptionalParam(context: IExecuteFunctions, paramName: string, itemInd
 ` : '';
 
   return `import { IExecuteFunctions, INodeProperties } from 'n8n-workflow';
-${fixedCollectionFn}${jsonFn}${optionalFn}
+${fixedCollectionFn}${dateFn}${jsonFn}${optionalFn}
 export function buildActorInput(
 	context: IExecuteFunctions,
 	itemIndex: number,
@@ -536,7 +553,7 @@ async function generateNode(client: ApifyClient, actorId: string, actorName: str
 
   // Get properties from actor schema
   const properties = await createActorAppSchemaForN8n(client, actor) as INodeProperties[];
-  const { paramAssignments, usesFixedCollection, usesJson, usesOptional } = buildParameterAssignments(properties);
+  const { paramAssignments, usesFixedCollection, usesDate, usesJson, usesOptional } = buildParameterAssignments(properties);
 
   const displayName = actor.title || actorName;
   const description = actor.description || `Run the ${displayName} Actor on Apify`;
@@ -550,7 +567,7 @@ async function generateNode(client: ApifyClient, actorId: string, actorName: str
   // Generate properties.ts
   fs.writeFileSync(
     path.join(nodeDir, `${className}.properties.ts`),
-    generatePropertiesTs(properties, paramAssignments, usesFixedCollection, usesJson, usesOptional)
+    generatePropertiesTs(properties, paramAssignments, usesFixedCollection, usesDate, usesJson, usesOptional)
   );
 
   // Generate helpers/genericFunctions.ts
@@ -580,7 +597,6 @@ async function updatePackageJson(classNames: string[]) {
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
 
   packageJson.name = PACKAGE_NAME;
-  packageJson.version = '1.0.0';
   packageJson.description = 'n8n community nodes for Hypebridge Apify actors - event scrapers, influencer tools, and more';
   packageJson.author = {
     name: 'Hypebridge',
