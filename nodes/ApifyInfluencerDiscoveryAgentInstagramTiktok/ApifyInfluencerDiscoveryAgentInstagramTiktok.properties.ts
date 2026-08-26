@@ -1,5 +1,22 @@
 import { IExecuteFunctions, INodeProperties } from 'n8n-workflow';
 
+function getFixedCollectionParam(
+	context: IExecuteFunctions,
+	paramName: string,
+	itemIndex: number,
+	optionName: string,
+	transformType: 'passthrough' | 'mapValues',
+): Record<string, any> {
+	const param = context.getNodeParameter(paramName, itemIndex, {}) as { [key: string]: any[] };
+	if (!param?.[optionName]?.length) return {};
+
+	let result = param[optionName];
+	if (transformType === 'mapValues') {
+		result = result.map((item: any) => item.value);
+	}
+	return { [paramName]: result };
+}
+
 function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
 	const value = context.getNodeParameter(paramName, itemIndex);
 	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
@@ -16,14 +33,18 @@ export function buildActorInput(
 		request: context.getNodeParameter('request', itemIndex),
 		// Target Quantity (targetQuantity)
 		targetQuantity: context.getNodeParameter('targetQuantity', itemIndex),
+		// Exclude Accounts (excludeHandles)
+		...getFixedCollectionParam(context, 'excludeHandles', itemIndex, 'values', 'mapValues'),
 		// Platform (platform)
 		platform: context.getNodeParameter('platform', itemIndex),
 		// Minimum Followers (minFollowers)
 		minFollowers: context.getNodeParameter('minFollowers', itemIndex),
-		// Maximum Followers (maxFollowers)
-		maxFollowers: context.getNodeParameter('maxFollowers', itemIndex),
 		// Location (location)
 		...getOptionalParam(context, 'location', itemIndex),
+		// Similar To — Instagram Seeds (seedHandlesInstagram)
+		...getFixedCollectionParam(context, 'seedHandlesInstagram', itemIndex, 'values', 'mapValues'),
+		// Similar To — TikTok Seeds (seedHandlesTikTok)
+		...getFixedCollectionParam(context, 'seedHandlesTikTok', itemIndex, 'values', 'mapValues'),
 	};
 }
 
@@ -54,7 +75,10 @@ export const actorProperties: INodeProperties[] = [
     "description": "Describe your ideal influencer and the actor will find matches (Instagram and TikTok only).",
     "required": true,
     "default": "Fashion influencer on Instagram with 100k+ followers who focuses on sustainable clothing and lifestyle",
-    "type": "string"
+    "type": "string",
+    "typeOptions": {
+      "rows": 5
+    }
   },
   {
     "displayName": "Target Quantity",
@@ -67,6 +91,31 @@ export const actorProperties: INodeProperties[] = [
       "minValue": 1,
       "maxValue": 30
     }
+  },
+  {
+    "displayName": "Exclude Accounts",
+    "name": "excludeHandles",
+    "description": "Accounts you already have. Never scraped, never evaluated, never billed. For long rosters, pass this as a JSON array via the API.",
+    "required": false,
+    "default": {},
+    "type": "fixedCollection",
+    "typeOptions": {
+      "multipleValues": true
+    },
+    "options": [
+      {
+        "name": "values",
+        "displayName": "Values",
+        "values": [
+          {
+            "displayName": "Value",
+            "name": "value",
+            "type": "string",
+            "default": ""
+          }
+        ]
+      }
+    ]
   },
   {
     "displayName": "Platform",
@@ -93,18 +142,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Minimum Followers",
     "name": "minFollowers",
-    "description": "Minimum follower count (optional filter). When Maximum Followers is also set, the range must span at least 50,000 followers. Narrower ranges are automatically expanded by increasing Maximum Followers.",
-    "required": false,
-    "default": 0,
-    "type": "number",
-    "typeOptions": {
-      "minValue": 0
-    }
-  },
-  {
-    "displayName": "Maximum Followers",
-    "name": "maxFollowers",
-    "description": "Maximum follower count (optional filter). When Minimum Followers is also set, the range must span at least 50,000 followers. If needed, this value is automatically increased before discovery starts.",
+    "description": "Minimum follower count (optional filter).",
     "required": false,
     "default": 0,
     "type": "number",
@@ -119,6 +157,56 @@ export const actorProperties: INodeProperties[] = [
     "required": false,
     "default": "United States",
     "type": "string"
+  },
+  {
+    "displayName": "Similar To — Instagram Seeds",
+    "name": "seedHandlesInstagram",
+    "description": "Find Instagram creators similar to these handles (with or without '@'). Seeds are crawl starting points and are never returned as results.",
+    "required": false,
+    "default": {},
+    "type": "fixedCollection",
+    "typeOptions": {
+      "multipleValues": true
+    },
+    "options": [
+      {
+        "name": "values",
+        "displayName": "Values",
+        "values": [
+          {
+            "displayName": "Value",
+            "name": "value",
+            "type": "string",
+            "default": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "displayName": "Similar To — TikTok Seeds",
+    "name": "seedHandlesTikTok",
+    "description": "Find TikTok creators similar to these handles (with or without '@').",
+    "required": false,
+    "default": {},
+    "type": "fixedCollection",
+    "typeOptions": {
+      "multipleValues": true
+    },
+    "options": [
+      {
+        "name": "values",
+        "displayName": "Values",
+        "values": [
+          {
+            "displayName": "Value",
+            "name": "value",
+            "type": "string",
+            "default": ""
+          }
+        ]
+      }
+    ]
   }
 ];
 

@@ -30,6 +30,8 @@ export function buildActorInput(
 		maxEvents: context.getNodeParameter('maxEvents', itemIndex),
 		// Scrape Full Event Details (scrapeEventDetails)
 		scrapeEventDetails: context.getNodeParameter('scrapeEventDetails', itemIndex),
+		// Include Ticket Tiers (includeTicketTypes)
+		includeTicketTypes: context.getNodeParameter('includeTicketTypes', itemIndex),
 	};
 }
 
@@ -94,6 +96,14 @@ export const actorProperties: INodeProperties[] = [
     "displayName": "Scrape Full Event Details",
     "name": "scrapeEventDetails",
     "description": "When enabled, fetches complete event information including full description, lineup, organizer details, and ticket info. Additional charges apply per event detail scraped.",
+    "required": false,
+    "default": true,
+    "type": "boolean"
+  },
+  {
+    "displayName": "Include Ticket Tiers",
+    "name": "includeTicketTypes",
+    "description": "When enabled, fetches every ticket tier for each event (tier name, price, sales tax, per-tier availability and release name). Adds one extra API request per event detail scraped. Requires Scrape Full Event Details.",
     "required": false,
     "default": true,
     "type": "boolean"

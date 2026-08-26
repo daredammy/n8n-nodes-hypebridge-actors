@@ -61,7 +61,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Sports / Category",
     "name": "sportsCategory",
-    "description": "Select which sports or categories to scrape. Leave empty for all categories.",
+    "description": "Categories to scrape. Matches either a DraftKings Predictions category (e.g. crypto, politics) or a league directly (e.g. nfl, bitcoin). Leagues are resolved against the live catalogue at run time, so newly listed ones work without an update. Leave empty for everything.",
     "required": true,
     "default": [],
     "type": "multiOptions",
@@ -71,11 +71,35 @@ export const actorProperties: INodeProperties[] = [
         "value": "featured"
       },
       {
+        "name": "Crypto",
+        "value": "crypto"
+      },
+      {
+        "name": "Economics",
+        "value": "economics"
+      },
+      {
+        "name": "Financials",
+        "value": "financials"
+      },
+      {
+        "name": "Politics",
+        "value": "politics"
+      },
+      {
+        "name": "Culture",
+        "value": "culture"
+      },
+      {
+        "name": "Climate",
+        "value": "climate"
+      },
+      {
         "name": "NFL",
         "value": "nfl"
       },
       {
-        "name": "College Football (CFB)",
+        "name": "College Football (NCAAF)",
         "value": "cfb"
       },
       {
@@ -83,43 +107,87 @@ export const actorProperties: INodeProperties[] = [
         "value": "nba"
       },
       {
+        "name": "WNBA",
+        "value": "wnba"
+      },
+      {
         "name": "NHL",
         "value": "nhl"
       },
       {
-        "name": "College Basketball (CBB)",
-        "value": "cbb"
+        "name": "MLB",
+        "value": "mlb"
       },
       {
-        "name": "Economics",
-        "value": "economics"
+        "name": "UFC",
+        "value": "ufc"
       },
       {
-        "name": "Stock Market",
+        "name": "Stock Market (→ Financials)",
         "value": "stock-market"
       },
       {
-        "name": "Crypto",
-        "value": "crypto"
+        "name": "Commodities (→ Financials)",
+        "value": "commodities"
       },
       {
-        "name": "Commodities",
-        "value": "commodities"
+        "name": "Baseball",
+        "value": "baseball"
+      },
+      {
+        "name": "Basketball",
+        "value": "basketball"
+      },
+      {
+        "name": "Boxing",
+        "value": "boxing"
+      },
+      {
+        "name": "Football",
+        "value": "football"
+      },
+      {
+        "name": "Golf",
+        "value": "golf"
+      },
+      {
+        "name": "Hockey",
+        "value": "hockey"
+      },
+      {
+        "name": "MMA",
+        "value": "mma"
+      },
+      {
+        "name": "Motorsports",
+        "value": "motorsports"
+      },
+      {
+        "name": "Sailing",
+        "value": "sailing"
+      },
+      {
+        "name": "Soccer",
+        "value": "soccer"
+      },
+      {
+        "name": "Tennis",
+        "value": "tennis"
       }
     ]
   },
   {
     "displayName": "Subcategory",
     "name": "subcategory",
-    "description": "Subcategory to scrape. For sports: 'games' (head-to-head matchups) or 'futures' (outright winners). For financial categories, use specific market types: stock-market (s&p, nasdaq, dow, russell), commodities (oil-gas, gold, silver, copper, currency), crypto (bitcoin). Leave empty for default behavior.",
+    "description": "Narrows to a specific league within the selected categories, matched on name (e.g. 'bitcoin', 'nba', 's&p'). Leave empty for every league in the category. Ignored if it matches nothing.",
     "required": false,
-    "default": "bitcoin",
+    "default": "",
     "type": "string"
   },
   {
     "displayName": "Maximum Results",
     "name": "maxResults",
-    "description": "Maximum number of items to return. Set to 0 for unlimited results.",
+    "description": "Maximum number of market rows to return. Each row is one market with all of its outcomes. Set to 0 for unlimited.",
     "required": false,
     "default": 20,
     "type": "number",
@@ -130,7 +198,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Include More Markets",
     "name": "includeMoreMarkets",
-    "description": "When enabled, scrapes additional market lines from each event's detail page (e.g., alternate spreads, alternate totals). Charged per event detail page scraped.",
+    "description": "Include every market line per event, not just the primary market. Charged per event that has additional lines.",
     "required": false,
     "default": true,
     "type": "boolean"
@@ -138,9 +206,9 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Proxy Configuration",
     "name": "proxyConfiguration",
-    "description": "Proxy settings. DraftKings requires residential proxies for sports pages. Financial pages may work with datacenter proxies.",
+    "description": "Optional. The API is reached over plain HTTPS with browser TLS impersonation and does not need residential proxies. A proxy is used only as an automatic fallback if the request is blocked.",
     "required": false,
-    "default": "{\"useApifyProxy\":true,\"apifyProxyGroups\":[\"RESIDENTIAL\"],\"apifyProxyCountry\":\"US\"}",
+    "default": "{\"useApifyProxy\":false}",
     "type": "json"
   }
 ];

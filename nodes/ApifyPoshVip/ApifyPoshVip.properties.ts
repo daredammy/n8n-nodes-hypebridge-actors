@@ -57,7 +57,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Start URLs",
     "name": "startUrls",
-    "description": "Posh.vip URLs to scrape. Use search/discover URLs with query params (location, date filters) or direct event URLs (posh.vip/e/event-name).",
+    "description": "Posh.vip URLs to scrape: explore URLs (posh.vip/explore?location=Miami&when=This+Week), organizer pages (posh.vip/g/organizer-name), or direct event URLs (posh.vip/e/event-name). For explore URLs, target a city rather than a state or region — Posh indexes events by city, so '?location=Washington' searches Washington DC. 'when' accepts Today, This+Week, or This+Month. Omitting 'location' defaults to New York City.",
     "required": true,
     "default": {},
     "type": "fixedCollection",
@@ -82,12 +82,13 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Maximum Events",
     "name": "maxEvents",
-    "description": "Maximum number of events to scrape. Set to 0 for unlimited.",
+    "description": "Maximum number of event records to scrape per run.",
     "required": false,
     "default": 100,
     "type": "number",
     "typeOptions": {
-      "minValue": 0
+      "minValue": 1,
+      "maxValue": 1000
     }
   },
   {

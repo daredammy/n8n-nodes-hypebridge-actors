@@ -18,8 +18,8 @@ export const ClassNameCamel = 'apifyFilmfreewayFestivalScraper' as string;
 export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = 'Frgkvw77h8aJOCL2D' as string;
 
-export const DISPLAY_NAME = 'FilmFreeway Festival Scraper — Deadlines & Entry Fees' as string;
-export const DESCRIPTION = 'Run the FilmFreeway Festival Scraper — Deadlines & Entry Fees Actor on Apify' as string;
+export const DISPLAY_NAME = 'FilmFreeway Festival Scraper' as string;
+export const DESCRIPTION = 'FilmFreeway Festival Scraper extracts public film-festival listings, submission deadlines, category-specific entry fees, event dates, venues, ratings, and qualification badges from FilmFreeway.' as string;
 
 export class ApifyFilmfreewayFestivalScraper implements INodeType {
 	description: INodeTypeDescription = {

@@ -70,7 +70,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Start URLs",
     "name": "startUrls",
-    "description": "Eventbrite search/discovery URLs to scrape. Direct Search fields replace the prefilled nationwide URL; custom Start URLs take precedence.",
+    "description": "Eventbrite search, browse, organizer, or event URLs. Supports /d/ discovery, /b/ browse, /o/ organizer profile, and direct /e/ event URLs. Direct Search fields replace the prefilled nationwide URL; custom Start URLs take precedence.",
     "required": false,
     "default": {},
     "type": "fixedCollection",

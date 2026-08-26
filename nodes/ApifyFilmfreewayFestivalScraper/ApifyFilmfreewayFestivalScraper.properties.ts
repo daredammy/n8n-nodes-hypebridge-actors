@@ -84,7 +84,7 @@ export function buildActorInput(
 		curatedCollection: context.getNodeParameter('curatedCollection', itemIndex),
 		// Enumerate from sitemap (enumerateFromSitemap)
 		enumerateFromSitemap: context.getNodeParameter('enumerateFromSitemap', itemIndex),
-		// Maximum concurrency (maxConcurrency)
+		// Maximum sticky sessions (maxConcurrency)
 		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex),
 		// Proxy configuration (proxyConfiguration)
 		...getJsonParam(context, 'proxyConfiguration', itemIndex),
@@ -352,7 +352,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "maxEntryFee",
     "description": "Approximate FilmFreeway server-side fee filter.",
     "required": false,
-    "default": 100,
+    "default": 0,
     "type": "number",
     "typeOptions": {
       "minValue": 0,
@@ -533,21 +533,21 @@ export const actorProperties: INodeProperties[] = [
     "type": "boolean"
   },
   {
-    "displayName": "Maximum concurrency",
+    "displayName": "Maximum sticky sessions",
     "name": "maxConcurrency",
-    "description": "Keep low to reduce Cloudflare challenges.",
+    "description": "One worker is bound to each validated residential identity. Capped at three to bound memory, proxy churn, and request rate.",
     "required": false,
     "default": 3,
     "type": "number",
     "typeOptions": {
       "minValue": 1,
-      "maxValue": 10
+      "maxValue": 3
     }
   },
   {
     "displayName": "Proxy configuration",
     "name": "proxyConfiguration",
-    "description": "Residential proxy is recommended for FilmFreeway.",
+    "description": "Untargeted Apify Residential proxy is the tested default. Each validated session retains one IP, cookie jar, and Chrome wire fingerprint.",
     "required": false,
     "default": "{\"useApifyProxy\":true,\"apifyProxyGroups\":[\"RESIDENTIAL\"]}",
     "type": "json"
