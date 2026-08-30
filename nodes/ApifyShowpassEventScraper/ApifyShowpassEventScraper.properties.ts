@@ -127,7 +127,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "getEventDetails",
     "description": "Fetch tags, event ratings, recurring-event data, sold-out messaging, and all-in fee/tax pricing for every collection event. Direct event URLs are always detailed.",
     "required": false,
-    "default": false,
+    "default": true,
     "type": "boolean"
   },
   {
@@ -229,7 +229,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "includePastEvents",
     "description": "For homepage and organizer collections, include archived events. Featured-city discovery remains upcoming-oriented because that is how Showpass exposes it.",
     "required": false,
-    "default": false,
+    "default": true,
     "type": "boolean"
   },
   {
