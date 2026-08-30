@@ -22,6 +22,7 @@ const ACTORS = [
   { id: '8XMqU9wbHagBrsqVM', name: 'nfm' },
   { id: 'OZnsMd2g4Ny9wKMgE', name: 'goodfirms-agency-scraper' },
   { id: 'Frgkvw77h8aJOCL2D', name: 'filmfreeway-festival-scraper' },
+  { id: 'iPe2FRxtDIOuFJQUC', name: 'showpass-event-scraper' },
 ];
 
 const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors';
