@@ -27,7 +27,7 @@ export class ApifyPartifulEventsScraper implements INodeType {
 		name: ClassNameCamel,
 
 		// SNIPPET 2: Adjust the icon of your app
-		icon: 'file:logo.png',
+		icon: 'file:logo.svg',
 		group: ['transform'],
 		// Mismatched version and defaultVersion as a minor hack to hide "Custom API Call" resource
 		version: [1],
