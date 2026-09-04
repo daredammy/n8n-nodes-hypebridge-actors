@@ -55,7 +55,8 @@
       "dist/nodes/ApifyNfm/ApifyNfm.node.js",
       "dist/nodes/ApifyGoodfirmsAgencyScraper/ApifyGoodfirmsAgencyScraper.node.js",
       "dist/nodes/ApifyFilmfreewayFestivalScraper/ApifyFilmfreewayFestivalScraper.node.js",
-      "dist/nodes/ApifyShowpassEventScraper/ApifyShowpassEventScraper.node.js"
+      "dist/nodes/ApifyShowpassEventScraper/ApifyShowpassEventScraper.node.js",
+      "dist/nodes/ApifyEventenyVendorMarketDirectory/ApifyEventenyVendorMarketDirectory.node.js"
     ]
   },
   "peerDependencies": {

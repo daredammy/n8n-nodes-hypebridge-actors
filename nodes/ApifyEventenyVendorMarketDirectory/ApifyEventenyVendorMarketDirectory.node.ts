@@ -5,23 +5,23 @@ import {
 	INodeTypeDescription,
 	NodeConnectionType,
 } from 'n8n-workflow';
-import { properties } from './ApifyShowpassEventScraper.properties';
+import { properties } from './ApifyEventenyVendorMarketDirectory.properties';
 import { runActor } from './helpers/executeActor';
 
 // SNIPPET 1: Actor schema constants
-export const ACTOR_ID = 'iPe2FRxtDIOuFJQUC' as string;
+export const ACTOR_ID = 'r2s0hWJVbB7M0JPxj' as string;
 
 export const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors' as string;
-export const CLASS_NAME = 'ApifyShowpassEventScraper' as string;
-export const ClassNameCamel = 'apifyShowpassEventScraper' as string;
+export const CLASS_NAME = 'ApifyEventenyVendorMarketDirectory' as string;
+export const ClassNameCamel = 'apifyEventenyVendorMarketDirectory' as string;
 
 export const X_PLATFORM_HEADER_ID = 'n8n' as string;
-export const X_PLATFORM_APP_HEADER_ID = 'iPe2FRxtDIOuFJQUC' as string;
+export const X_PLATFORM_APP_HEADER_ID = 'r2s0hWJVbB7M0JPxj' as string;
 
-export const DISPLAY_NAME = 'Showpass Event Scraper' as string;
-export const DESCRIPTION = 'Extracts public event listings, ticket pricing, venue profiles, and organizer information from Showpass' as string;
+export const DISPLAY_NAME = 'Eventeny Vendor & Market Directory Scraper' as string;
+export const DESCRIPTION = 'Extracts public Eventeny events, vendor and exhibitor applications with booth fees and deadlines, ticket tiers, and organizer profiles' as string;
 
-export class ApifyShowpassEventScraper implements INodeType {
+export class ApifyEventenyVendorMarketDirectory implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: DISPLAY_NAME,
 		name: ClassNameCamel,

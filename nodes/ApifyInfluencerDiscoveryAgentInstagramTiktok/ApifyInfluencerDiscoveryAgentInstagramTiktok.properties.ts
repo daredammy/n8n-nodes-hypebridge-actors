@@ -122,7 +122,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "platform",
     "description": "Social media platform (optional filter)",
     "required": false,
-    "default": "",
+    "default": "mixed",
     "type": "options",
     "options": [
       {
@@ -147,7 +147,8 @@ export const actorProperties: INodeProperties[] = [
     "default": 0,
     "type": "number",
     "typeOptions": {
-      "minValue": 0
+      "minValue": 0,
+      "maxValue": 100000000
     }
   },
   {
