@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-hypebridge-actors",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "n8n community nodes for Hypebridge Apify actors - event scrapers, influencer tools, and more",
   "keywords": [
     "n8n-community-node-package",
@@ -40,6 +40,7 @@
       "dist/credentials/ApifyOAuth2Api.credentials.js"
     ],
     "nodes": [
+      "dist/nodes/ApifyFindEvents/ApifyFindEvents.node.js",
       "dist/nodes/ApifyEventbriteSearch/ApifyEventbriteSearch.node.js",
       "dist/nodes/ApifyDraftkingsPredictions/ApifyDraftkingsPredictions.node.js",
       "dist/nodes/ApifyEater/ApifyEater.node.js",

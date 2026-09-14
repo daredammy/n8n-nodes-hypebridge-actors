@@ -36,6 +36,7 @@ Then restart n8n.
 
 | Node | Description | Apify Actor |
 |------|-------------|-------------|
+| **Find Events** | Find and normalize local events across all applicable sources | [hypebridge/find-events](https://apify.com/hypebridge/find-events) |
 | **Eventbrite Search** | Scrape Eventbrite search, discovery, and event detail pages | [hypebridge/eventbrite-search](https://apify.com/hypebridge/eventbrite-search) |
 | **Dice.fm** | Scrape concerts, festivals, DJ events, and live shows | [hypebridge/dice-fm](https://apify.com/hypebridge/dice-fm) |
 | **Shotgun Live** | Scrape electronic music, nightlife, and party events worldwide | [hypebridge/shotgun-live](https://apify.com/hypebridge/shotgun-live) |

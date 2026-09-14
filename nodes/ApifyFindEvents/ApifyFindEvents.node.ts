@@ -19,7 +19,7 @@ export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = 'find-events-app' as string;
 
 export const DISPLAY_NAME = 'Apify Find Events' as string;
-export const DESCRIPTION = 'Queries multiple event platforms for a given city and category, returning a single normalized dataset of scheduled events. Supported platforms include Eventbrite, Meetup, Luma, Dice, Eventnoire, Posh, Prekindle, and Shotgun.' as string;
+export const DESCRIPTION = 'Finds and normalizes local events across global and regional event platforms, automatically prioritizing sources with proven local affinity.' as string;
 
 export class ApifyFindEvents implements INodeType {
 	description: INodeTypeDescription = {

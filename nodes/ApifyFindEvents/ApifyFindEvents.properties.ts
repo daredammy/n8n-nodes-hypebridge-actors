@@ -193,9 +193,23 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Platforms",
     "name": "platforms",
-    "description": "Platforms to include. Partiful runs only when the requested city maps to a supported metro region.",
+    "description": "Optional source allowlist. Regional sources are automatically used only where they serve the requested city or country.",
     "required": false,
-    "default": [],
+    "default": [
+      "luma",
+      "meetup",
+      "partiful",
+      "dice",
+      "eventnoire",
+      "posh",
+      "prekindle",
+      "shotgun",
+      "eventbrite",
+      "showpass",
+      "sympla",
+      "runsignup",
+      "eventeny"
+    ],
     "type": "multiOptions",
     "options": [
       {
@@ -233,6 +247,22 @@ export const actorProperties: INodeProperties[] = [
       {
         "name": "Shotgun",
         "value": "shotgun"
+      },
+      {
+        "name": "Showpass",
+        "value": "showpass"
+      },
+      {
+        "name": "Sympla",
+        "value": "sympla"
+      },
+      {
+        "name": "RunSignup",
+        "value": "runsignup"
+      },
+      {
+        "name": "Eventeny",
+        "value": "eventeny"
       }
     ]
   },
