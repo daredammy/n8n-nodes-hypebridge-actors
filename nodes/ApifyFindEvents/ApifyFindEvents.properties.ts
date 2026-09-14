@@ -54,10 +54,6 @@ export function buildActorInput(
 		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex),
 		// Platforms (platforms)
 		platforms: context.getNodeParameter('platforms', itemIndex),
-		// Max cheap actors (maxCheapActors)
-		maxCheapActors: context.getNodeParameter('maxCheapActors', itemIndex),
-		// Use expensive fallbacks (useExpensiveFallbacks)
-		useExpensiveFallbacks: context.getNodeParameter('useExpensiveFallbacks', itemIndex),
 		// Min useful results (minUsefulResults)
 		minUsefulResults: context.getNodeParameter('minUsefulResults', itemIndex),
 		// Child run timeout (childRunTimeoutSecs)
@@ -243,26 +239,6 @@ export const actorProperties: INodeProperties[] = [
     ]
   },
   {
-    "displayName": "Max cheap actors",
-    "name": "maxCheapActors",
-    "description": "Maximum number of cheap downstream actors to run before considering expensive fallbacks.",
-    "required": false,
-    "default": 5,
-    "type": "number",
-    "typeOptions": {
-      "minValue": 1,
-      "maxValue": 8
-    }
-  },
-  {
-    "displayName": "Use expensive fallbacks",
-    "name": "useExpensiveFallbacks",
-    "description": "Allow Eventbrite and other expensive actors if cheap actors do not produce enough results.",
-    "required": false,
-    "default": true,
-    "type": "boolean"
-  },
-  {
     "displayName": "Min useful results",
     "name": "minUsefulResults",
     "description": "If a platform returns fewer records than this and maxEvents is not reached, continue to the next platform.",
@@ -289,7 +265,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Debug mode",
     "name": "debugMode",
-    "description": "Store route plans, child inputs, pricing decisions, and skipped-platform reasons in the key-value store.",
+    "description": "Store route plans, child inputs, affinity decisions, and skipped-platform reasons in the key-value store.",
     "required": false,
     "default": false,
     "type": "boolean"
