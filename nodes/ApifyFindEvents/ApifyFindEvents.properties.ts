@@ -54,8 +54,6 @@ export function buildActorInput(
 		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex),
 		// Platforms (platforms)
 		platforms: context.getNodeParameter('platforms', itemIndex),
-		// Min useful results (minUsefulResults)
-		minUsefulResults: context.getNodeParameter('minUsefulResults', itemIndex),
 		// Child run timeout (childRunTimeoutSecs)
 		childRunTimeoutSecs: context.getNodeParameter('childRunTimeoutSecs', itemIndex),
 		// Debug mode (debugMode)
@@ -237,18 +235,6 @@ export const actorProperties: INodeProperties[] = [
         "value": "shotgun"
       }
     ]
-  },
-  {
-    "displayName": "Min useful results",
-    "name": "minUsefulResults",
-    "description": "If a platform returns fewer records than this and maxEvents is not reached, continue to the next platform.",
-    "required": false,
-    "default": 3,
-    "type": "number",
-    "typeOptions": {
-      "minValue": 0,
-      "maxValue": 50
-    }
   },
   {
     "displayName": "Child run timeout",
