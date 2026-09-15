@@ -5,22 +5,30 @@ function getFixedCollectionParam(
 	paramName: string,
 	itemIndex: number,
 	optionName: string,
-	transformType: 'passthrough' | 'mapValues',
+	transformType: 'passthrough' | 'mapValues' | 'keyValue',
 ): Record<string, any> {
 	const param = context.getNodeParameter(paramName, itemIndex, {}) as { [key: string]: any[] };
 	if (!param?.[optionName]?.length) return {};
 
-	let result = param[optionName];
+	let result: any = param[optionName];
 	if (transformType === 'mapValues') {
 		result = result.map((item: any) => item.value);
+	} else if (transformType === 'keyValue') {
+		const kvObj: Record<string, any> = {};
+		for (const item of result) {
+			if (item.key !== undefined && item.key !== '') {
+				kvObj[item.key] = item.value;
+			}
+		}
+		result = kvObj;
 	}
 	return { [paramName]: result };
 }
 
 function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
 	try {
-		const rawValue = context.getNodeParameter(paramName, itemIndex);
-		if (typeof rawValue === 'string' && rawValue.trim() === '') {
+		const rawValue = context.getNodeParameter(paramName, itemIndex, undefined);
+		if (rawValue === undefined || rawValue === null || rawValue === '' || (typeof rawValue === 'string' && rawValue.trim() === '')) {
 			return {};
 		}
 		return { [paramName]: typeof rawValue === 'string' ? JSON.parse(rawValue) : rawValue };
@@ -30,7 +38,7 @@ function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: 
 }
 
 function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	const value = context.getNodeParameter(paramName, itemIndex);
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
 	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
 }
 
@@ -44,23 +52,23 @@ export function buildActorInput(
 		// Start URLs (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
 		// Maximum events (maxEvents)
-		maxEvents: context.getNodeParameter('maxEvents', itemIndex),
+		maxEvents: context.getNodeParameter('maxEvents', itemIndex, 100),
 		// Get full event details (getEventDetails)
-		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex),
+		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex, true),
 		// Search query (searchQuery)
 		...getOptionalParam(context, 'searchQuery', itemIndex),
 		// Featured city (featuredCity)
-		featuredCity: context.getNodeParameter('featuredCity', itemIndex),
+		...getOptionalParam(context, 'featuredCity', itemIndex),
 		// Exact city (exactCity)
 		...getOptionalParam(context, 'exactCity', itemIndex),
 		// Include past events (includePastEvents)
-		includePastEvents: context.getNodeParameter('includePastEvents', itemIndex),
+		includePastEvents: context.getNodeParameter('includePastEvents', itemIndex, true),
 		// Maximum concurrency (maxConcurrency)
-		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex),
+		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex, 5),
 		// Proxy configuration (proxyConfiguration)
 		...getJsonParam(context, 'proxyConfiguration', itemIndex),
 		// Debug mode (debugMode)
-		debugMode: context.getNodeParameter('debugMode', itemIndex),
+		debugMode: context.getNodeParameter('debugMode', itemIndex, false),
 	};
 }
 

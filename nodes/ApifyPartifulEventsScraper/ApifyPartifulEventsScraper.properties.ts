@@ -1,38 +1,40 @@
 import { IExecuteFunctions, INodeProperties } from 'n8n-workflow';
 
-// Helper functions for parameter extraction
-export function getFixedCollectionParam(
+function getFixedCollectionParam(
 	context: IExecuteFunctions,
 	paramName: string,
 	itemIndex: number,
 	optionName: string,
-	transformType: 'passthrough' | 'mapValues',
+	transformType: 'passthrough' | 'mapValues' | 'keyValue',
 ): Record<string, any> {
 	const param = context.getNodeParameter(paramName, itemIndex, {}) as { [key: string]: any[] };
 	if (!param?.[optionName]?.length) return {};
 
-	let result = param[optionName];
+	let result: any = param[optionName];
 	if (transformType === 'mapValues') {
 		result = result.map((item: any) => item.value);
+	} else if (transformType === 'keyValue') {
+		const kvObj: Record<string, any> = {};
+		for (const item of result) {
+			if (item.key !== undefined && item.key !== '') {
+				kvObj[item.key] = item.value;
+			}
+		}
+		result = kvObj;
 	}
 	return { [paramName]: result };
 }
 
-export function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
+function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
 	try {
-		const rawValue = context.getNodeParameter(paramName, itemIndex);
-		if (typeof rawValue === 'string' && rawValue.trim() === '') {
+		const rawValue = context.getNodeParameter(paramName, itemIndex, undefined);
+		if (rawValue === undefined || rawValue === null || rawValue === '' || (typeof rawValue === 'string' && rawValue.trim() === '')) {
 			return {};
 		}
 		return { [paramName]: typeof rawValue === 'string' ? JSON.parse(rawValue) : rawValue };
 	} catch (error) {
 		throw new Error(`Invalid JSON in parameter "${paramName}": ${(error as Error).message}`);
 	}
-}
-
-export function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	const value = context.getNodeParameter(paramName, itemIndex);
-	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
 }
 
 export function buildActorInput(
@@ -45,17 +47,17 @@ export function buildActorInput(
 		// Start URLs (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
 		// Max items (maxItems)
-		maxItems: context.getNodeParameter('maxItems', itemIndex),
+		maxItems: context.getNodeParameter('maxItems', itemIndex, 200),
 		// Get full event details (getEventDetails)
-		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex),
+		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex, false),
 		// Expand via similar events (includeSimilarEvents)
-		includeSimilarEvents: context.getNodeParameter('includeSimilarEvents', itemIndex),
+		includeSimilarEvents: context.getNodeParameter('includeSimilarEvents', itemIndex, false),
 		// Max concurrency (maxConcurrency)
-		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex),
+		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex, 10),
 		// Proxy configuration (proxyConfiguration)
 		...getJsonParam(context, 'proxyConfiguration', itemIndex),
 		// Debug mode (debugMode)
-		debugMode: context.getNodeParameter('debugMode', itemIndex),
+		debugMode: context.getNodeParameter('debugMode', itemIndex, false),
 	};
 }
 
@@ -83,7 +85,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Start URLs",
     "name": "startUrls",
-    "description": "Partiful URLs to scrape. Supports explore feeds (https://partiful.com/explore/nyc), single events (https://partiful.com/e/{id}), host profiles (https://partiful.com/u/{id}), and go.partiful.com short links. Use https://partiful.com/explore to crawl every region.",
+    "description": "Partiful URLs to scrape. Supports explore feeds (https://partiful.com/explore/nyc), common region names such as /explore/new_york, single events (https://partiful.com/e/{id}), host profiles (https://partiful.com/u/{id}), and go.partiful.com short links. Available regions are discovered from Partiful at run time. Use https://partiful.com/explore to crawl every region.",
     "required": true,
     "default": {},
     "type": "fixedCollection",
@@ -120,7 +122,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Get full event details",
     "name": "getEventDetails",
-    "description": "Fetch each event page for ticketing, hosts, RSVP status breakdown, timestamps, short URL, and similar event IDs. Direct event start URLs are always fetched with full details.",
+    "description": "Fetch each event page for ticketing, hosts, capacity and RSVP rules, public questions and callouts, timestamps, short URL, and similar event summaries. Direct event start URLs are always fetched with full details.",
     "required": false,
     "default": false,
     "type": "boolean"

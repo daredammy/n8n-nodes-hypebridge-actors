@@ -5,22 +5,30 @@ function getFixedCollectionParam(
 	paramName: string,
 	itemIndex: number,
 	optionName: string,
-	transformType: 'passthrough' | 'mapValues',
+	transformType: 'passthrough' | 'mapValues' | 'keyValue',
 ): Record<string, any> {
 	const param = context.getNodeParameter(paramName, itemIndex, {}) as { [key: string]: any[] };
 	if (!param?.[optionName]?.length) return {};
 
-	let result = param[optionName];
+	let result: any = param[optionName];
 	if (transformType === 'mapValues') {
 		result = result.map((item: any) => item.value);
+	} else if (transformType === 'keyValue') {
+		const kvObj: Record<string, any> = {};
+		for (const item of result) {
+			if (item.key !== undefined && item.key !== '') {
+				kvObj[item.key] = item.value;
+			}
+		}
+		result = kvObj;
 	}
 	return { [paramName]: result };
 }
 
 function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
 	try {
-		const rawValue = context.getNodeParameter(paramName, itemIndex);
-		if (typeof rawValue === 'string' && rawValue.trim() === '') {
+		const rawValue = context.getNodeParameter(paramName, itemIndex, undefined);
+		if (rawValue === undefined || rawValue === null || rawValue === '' || (typeof rawValue === 'string' && rawValue.trim() === '')) {
 			return {};
 		}
 		return { [paramName]: typeof rawValue === 'string' ? JSON.parse(rawValue) : rawValue };
@@ -39,15 +47,15 @@ export function buildActorInput(
 		// Start URLs (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
 		// Max Items (maxItems)
-		maxItems: context.getNodeParameter('maxItems', itemIndex),
+		maxItems: context.getNodeParameter('maxItems', itemIndex, 100),
 		// Scrape Full Post Details (scrapePostsFromLists)
-		scrapePostsFromLists: context.getNodeParameter('scrapePostsFromLists', itemIndex),
+		scrapePostsFromLists: context.getNodeParameter('scrapePostsFromLists', itemIndex, false),
 		// Scrape Comments (scrapeComments)
-		scrapeComments: context.getNodeParameter('scrapeComments', itemIndex),
+		scrapeComments: context.getNodeParameter('scrapeComments', itemIndex, false),
 		// Max Comments per Post (maxComments)
-		maxComments: context.getNodeParameter('maxComments', itemIndex),
+		maxComments: context.getNodeParameter('maxComments', itemIndex, 10),
 		// Debug Mode (debugMode)
-		debugMode: context.getNodeParameter('debugMode', itemIndex),
+		debugMode: context.getNodeParameter('debugMode', itemIndex, false),
 		// Proxy Configuration (proxyConfiguration)
 		...getJsonParam(context, 'proxyConfiguration', itemIndex),
 	};

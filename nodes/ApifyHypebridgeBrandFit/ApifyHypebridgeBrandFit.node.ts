@@ -5,23 +5,23 @@ import {
 	INodeTypeDescription,
 	NodeConnectionType,
 } from 'n8n-workflow';
-import { properties } from './ApifyBlindPostCommentsScraper.properties';
+import { properties } from './ApifyHypebridgeBrandFit.properties';
 import { runActor } from './helpers/executeActor';
 
 // SNIPPET 1: Actor schema constants
-export const ACTOR_ID = 'h4IM5lZDxLlFcQ3yx' as string;
+export const ACTOR_ID = 'oArh9wsCGUj8gwEvr' as string;
 
 export const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors' as string;
-export const CLASS_NAME = 'ApifyBlindPostCommentsScraper' as string;
-export const ClassNameCamel = 'apifyBlindPostCommentsScraper' as string;
+export const CLASS_NAME = 'ApifyHypebridgeBrandFit' as string;
+export const ClassNameCamel = 'apifyHypebridgeBrandFit' as string;
 
 export const X_PLATFORM_HEADER_ID = 'n8n' as string;
-export const X_PLATFORM_APP_HEADER_ID = 'h4IM5lZDxLlFcQ3yx' as string;
+export const X_PLATFORM_APP_HEADER_ID = 'oArh9wsCGUj8gwEvr' as string;
 
-export const DISPLAY_NAME = 'Blind Post Scraper' as string;
-export const DESCRIPTION = 'Scrape posts, comments and discussions from teamblind.com, the anonymous professional community platform.' as string;
+export const DISPLAY_NAME = 'Influencer Brand Fit Evaluator' as string;
+export const DESCRIPTION = 'Assess whether any Instagram or TikTok influencer matches your campaign requirements. Analyzing posts, and computing demographic alignment, the tool provides instant criterion-by-criterion fit assessments, detailed reasoning, summary counts, and an overall percentage fit score.' as string;
 
-export class ApifyBlindPostCommentsScraper implements INodeType {
+export class ApifyHypebridgeBrandFit implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: DISPLAY_NAME,
 		name: ClassNameCamel,

@@ -5,14 +5,22 @@ function getFixedCollectionParam(
 	paramName: string,
 	itemIndex: number,
 	optionName: string,
-	transformType: 'passthrough' | 'mapValues',
+	transformType: 'passthrough' | 'mapValues' | 'keyValue',
 ): Record<string, any> {
 	const param = context.getNodeParameter(paramName, itemIndex, {}) as { [key: string]: any[] };
 	if (!param?.[optionName]?.length) return {};
 
-	let result = param[optionName];
+	let result: any = param[optionName];
 	if (transformType === 'mapValues') {
 		result = result.map((item: any) => item.value);
+	} else if (transformType === 'keyValue') {
+		const kvObj: Record<string, any> = {};
+		for (const item of result) {
+			if (item.key !== undefined && item.key !== '') {
+				kvObj[item.key] = item.value;
+			}
+		}
+		result = kvObj;
 	}
 	return { [paramName]: result };
 }
@@ -27,9 +35,9 @@ export function buildActorInput(
 		// Start URLs (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
 		// Maximum Events (maxEvents)
-		maxEvents: context.getNodeParameter('maxEvents', itemIndex),
+		maxEvents: context.getNodeParameter('maxEvents', itemIndex, 100),
 		// Scrape Full Event Details (scrapeEventDetails)
-		scrapeEventDetails: context.getNodeParameter('scrapeEventDetails', itemIndex),
+		scrapeEventDetails: context.getNodeParameter('scrapeEventDetails', itemIndex, true),
 	};
 }
 

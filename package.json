@@ -44,7 +44,7 @@
       "dist/nodes/ApifyEventbriteSearch/ApifyEventbriteSearch.node.js",
       "dist/nodes/ApifyDraftkingsPredictions/ApifyDraftkingsPredictions.node.js",
       "dist/nodes/ApifyEater/ApifyEater.node.js",
-      "dist/nodes/ApifyBlindPostCommentsScraper/ApifyBlindPostCommentsScraper.node.js",
+      "dist/nodes/ApifyBlindPostScraper/ApifyBlindPostScraper.node.js",
       "dist/nodes/ApifyEventnoire/ApifyEventnoire.node.js",
       "dist/nodes/ApifyInfluencerEvaluationAgentInstagramTiktok/ApifyInfluencerEvaluationAgentInstagramTiktok.node.js",
       "dist/nodes/ApifyDiceFm/ApifyDiceFm.node.js",
@@ -57,7 +57,21 @@
       "dist/nodes/ApifyGoodfirmsAgencyScraper/ApifyGoodfirmsAgencyScraper.node.js",
       "dist/nodes/ApifyFilmfreewayFestivalScraper/ApifyFilmfreewayFestivalScraper.node.js",
       "dist/nodes/ApifyShowpassEventScraper/ApifyShowpassEventScraper.node.js",
-      "dist/nodes/ApifyEventenyVendorMarketDirectory/ApifyEventenyVendorMarketDirectory.node.js"
+      "dist/nodes/ApifyEventenyVendorMarketDirectory/ApifyEventenyVendorMarketDirectory.node.js",
+      "dist/nodes/ApifyPartifulEventsScraper/ApifyPartifulEventsScraper.node.js",
+      "dist/nodes/ApifyShopAppScraper/ApifyShopAppScraper.node.js",
+      "dist/nodes/ApifySheinScraper/ApifySheinScraper.node.js",
+      "dist/nodes/ApifyMeetupScraperAllUrls/ApifyMeetupScraperAllUrls.node.js",
+      "dist/nodes/ApifyFashionnovaScraper/ApifyFashionnovaScraper.node.js",
+      "dist/nodes/ApifyEconomicCalendarApi/ApifyEconomicCalendarApi.node.js",
+      "dist/nodes/ApifyWhopCampaignIntelligence/ApifyWhopCampaignIntelligence.node.js",
+      "dist/nodes/ApifyEscortalligatorListcrawler/ApifyEscortalligatorListcrawler.node.js",
+      "dist/nodes/ApifyHypebridgeBrandFit/ApifyHypebridgeBrandFit.node.js",
+      "dist/nodes/ApifyPodcastTranscriptMentionExtractor/ApifyPodcastTranscriptMentionExtractor.node.js",
+      "dist/nodes/ApifySymplaEventsScraper/ApifySymplaEventsScraper.node.js",
+      "dist/nodes/ApifyRunsignupRaceScraper/ApifyRunsignupRaceScraper.node.js",
+      "dist/nodes/ApifyAdaptiveWebScraper/ApifyAdaptiveWebScraper.node.js",
+      "dist/nodes/ApifyGooglePopulartimes/ApifyGooglePopulartimes.node.js"
     ]
   },
   "peerDependencies": {

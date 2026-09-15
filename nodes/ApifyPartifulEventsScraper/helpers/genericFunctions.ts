@@ -9,17 +9,11 @@ import {
 } from 'n8n-workflow';
 import { ClassNameCamel, X_PLATFORM_APP_HEADER_ID, X_PLATFORM_HEADER_ID } from '../ApifyPartifulEventsScraper.node';
 
-/**
- * Extended request options for Apify API calls
- */
 type IApiRequestOptions = Omit<IHttpRequestOptions, 'url'> & {
 	uri?: string;
-	url?: string; // make optional to satisfy the interface
+	url?: string;
 };
 
-/**
- * Make an API request to Apify (modern version using IHttpRequestOptions)
- */
 export async function apiRequest(
 	this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
 	requestOptions: IApiRequestOptions,
@@ -38,7 +32,6 @@ export async function apiRequest(
 		headers['x-apify-integration-ai-tool'] = 'true';
 	}
 
-	// Final merged options with proper IHttpRequestOptions shape
 	const options: IHttpRequestOptions = {
 		...rest,
 		method,
@@ -48,7 +41,6 @@ export async function apiRequest(
 		json: true,
 	};
 
-	// Remove body if GET
 	if (method === 'GET' && 'body' in options) {
 		delete options.body;
 	}
@@ -84,17 +76,11 @@ export async function apiRequest(
 	}
 }
 
-/**
- * Detect if used from an AI Agent tool
- */
 export function isUsedAsAiTool(nodeType: string): boolean {
 	const parts = nodeType.split('.');
 	return parts[parts.length - 1] === `${ClassNameCamel}Tool`;
 }
 
-/**
- * Poll the Apify run until completion
- */
 export async function pollRunStatus(
 	this: IHookFunctions | IExecuteFunctions | ILoadOptionsFunctions,
 	runId: string,
@@ -120,9 +106,6 @@ export async function pollRunStatus(
 	return lastRunData;
 }
 
-/**
- * Fetch dataset results and optionally trim to markdown for AI tool usage
- */
 export async function getResults(this: IExecuteFunctions, datasetId: string): Promise<any> {
 	const results = await apiRequest.call(this, {
 		method: 'GET',
@@ -130,12 +113,9 @@ export async function getResults(this: IExecuteFunctions, datasetId: string): Pr
 	});
 
 	// SNIPPET 5: AI Agent tool usage optimizations
-	// It might be beneficial to remove fields like run info etc. This helps with the context limits of LLM's
-	// EXAMPLE BELOW: Leaves only relevant markdown result reducing total context usage
 	if (isUsedAsAiTool(this.getNode().type)) {
 		// results = results.map((item: any) => ({ markdown: item.markdown }));
 	}
 
 	return this.helpers.returnJsonArray(results);
 }
-

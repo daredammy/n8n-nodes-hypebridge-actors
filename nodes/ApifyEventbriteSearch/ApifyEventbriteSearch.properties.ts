@@ -5,20 +5,28 @@ function getFixedCollectionParam(
 	paramName: string,
 	itemIndex: number,
 	optionName: string,
-	transformType: 'passthrough' | 'mapValues',
+	transformType: 'passthrough' | 'mapValues' | 'keyValue',
 ): Record<string, any> {
 	const param = context.getNodeParameter(paramName, itemIndex, {}) as { [key: string]: any[] };
 	if (!param?.[optionName]?.length) return {};
 
-	let result = param[optionName];
+	let result: any = param[optionName];
 	if (transformType === 'mapValues') {
 		result = result.map((item: any) => item.value);
+	} else if (transformType === 'keyValue') {
+		const kvObj: Record<string, any> = {};
+		for (const item of result) {
+			if (item.key !== undefined && item.key !== '') {
+				kvObj[item.key] = item.value;
+			}
+		}
+		result = kvObj;
 	}
 	return { [paramName]: result };
 }
 
 function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	const value = context.getNodeParameter(paramName, itemIndex);
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
 	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
 }
 
@@ -32,9 +40,9 @@ export function buildActorInput(
 		// Start URLs (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
 		// Scrape Event Details (scrapeEventDetails)
-		scrapeEventDetails: context.getNodeParameter('scrapeEventDetails', itemIndex),
+		scrapeEventDetails: context.getNodeParameter('scrapeEventDetails', itemIndex, false),
 		// Max Events (maxEvents)
-		maxEvents: context.getNodeParameter('maxEvents', itemIndex),
+		maxEvents: context.getNodeParameter('maxEvents', itemIndex, 5),
 		// Keyword (keyword)
 		...getOptionalParam(context, 'keyword', itemIndex),
 		// City (city)

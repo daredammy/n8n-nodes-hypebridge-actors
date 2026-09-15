@@ -2,6 +2,10 @@
 import { ApifyClient } from 'apify-client';
 import fs from 'fs';
 import path from 'path';
+import https from 'https';
+import http from 'http';
+import { URL } from 'url';
+import sharp from 'sharp';
 import { createActorAppSchemaForN8n } from './actorSchemaConverter';
 import type { INodeProperties } from 'n8n-workflow';
 import chalk from 'chalk';
@@ -11,7 +15,7 @@ const ACTORS = [
   { id: 'RjlsknvHDKDBbrNVX', name: 'eventbrite-search' },
   { id: '9H947AEOMEGDjwWQF', name: 'draftkings-predictions' },
   { id: 'RNlctZLFgonQhtzMy', name: 'eater' },
-  { id: 'h4IM5lZDxLlFcQ3yx', name: 'blind-post-comments-scraper' },
+  { id: 'h4IM5lZDxLlFcQ3yx', name: 'blind-post-scraper' },
   { id: 'roLLcGwYo8k6afKnH', name: 'eventnoire' },
   { id: 'wMq6Lnj8aX8EVRRTa', name: 'influencer-evaluation-agent-instagram-tiktok' },
   { id: 'CuHJ7SN96LdHDGAgk', name: 'dice-fm' },
@@ -25,6 +29,20 @@ const ACTORS = [
   { id: 'Frgkvw77h8aJOCL2D', name: 'filmfreeway-festival-scraper' },
   { id: 'iPe2FRxtDIOuFJQUC', name: 'showpass-event-scraper' },
   { id: 'r2s0hWJVbB7M0JPxj', name: 'eventeny-vendor-market-directory' },
+  { id: '8cRUPgqAkvHAmL4Wn', name: 'partiful-events-scraper' },
+  { id: 'pxAxPv5iilYB1qYqV', name: 'shop-app-scraper' },
+  { id: 'aNO4odb23qzDTuNj2', name: 'shein-scraper' },
+  { id: '7aM68FMx47ef3CHPc', name: 'meetup-scraper-all-urls' },
+  { id: 'Jd8z3QPUhuSC2QtmI', name: 'fashionnova-scraper' },
+  { id: '2UQ5B1IEeeqma9NhE', name: 'economic-calendar-api' },
+  { id: 'jD4xGn5nPuPJJtzf7', name: 'whop-campaign-intelligence' },
+  { id: 'cYqlsDgeqdqNbeUvJ', name: 'escortalligator-listcrawler' },
+  { id: 'oArh9wsCGUj8gwEvr', name: 'hypebridge-brand-fit' },
+  { id: '6tKzSq2IuChkRGbuc', name: 'podcast-transcript-mention-extractor' },
+  { id: 'AUvquCIU6GMq59Rpj', name: 'sympla-events-scraper' },
+  { id: '8CFqYmM8J7RKqEu4s', name: 'runsignup-race-scraper' },
+  { id: 'k5cyg7zhR5qwZOTbc', name: 'adaptive-web-scraper' },
+  { id: '5aM34Os04KwJdeeGf', name: 'google-populartimes' },
 ];
 
 const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors';
@@ -63,7 +81,12 @@ function buildParameterAssignments(properties: INodeProperties[]): BuildResult {
     if (prop.type === 'fixedCollection') {
       usesFixedCollection = true;
       for (const option of prop.options ?? []) {
-        const transformType = option.name === 'values' ? 'mapValues' : 'passthrough';
+        let transformType = 'passthrough';
+        if (option.name === 'values') {
+          transformType = 'mapValues';
+        } else if (option.name === 'pairs') {
+          transformType = 'keyValue';
+        }
         paramAssignments.push(`${comment}
 		...getFixedCollectionParam(context, '${prop.name}', itemIndex, '${option.name}', '${transformType}'),`);
       }
@@ -71,21 +94,23 @@ function buildParameterAssignments(properties: INodeProperties[]): BuildResult {
       usesJson = true;
       paramAssignments.push(`${comment}
 		...getJsonParam(context, '${prop.name}', itemIndex),`);
-    } else if (prop.type === 'number') {
-      paramAssignments.push(
-        `${comment}\n		${prop.name}: context.getNodeParameter('${prop.name}', itemIndex),`
-      );
     } else if (prop.type === 'dateTime') {
       usesDate = true;
       paramAssignments.push(`${comment}
 		...getDateParam(context, '${prop.name}', itemIndex),`);
-    } else if (prop.type === 'string' && !prop.required) {
+    } else if ((prop.type === 'string' || prop.type === 'options') && !prop.required) {
       usesOptional = true;
       paramAssignments.push(`${comment}
 		...getOptionalParam(context, '${prop.name}', itemIndex),`);
-    } else {
+    } else if (prop.type === 'number') {
+      const fallback = prop.default !== undefined ? JSON.stringify(prop.default) : 0;
       paramAssignments.push(
-        `${comment}\n		${prop.name}: context.getNodeParameter('${prop.name}', itemIndex),`
+        `${comment}\n		${prop.name}: context.getNodeParameter('${prop.name}', itemIndex, ${fallback}),`
+      );
+    } else {
+      const fallback = prop.default !== undefined ? JSON.stringify(prop.default) : 'undefined';
+      paramAssignments.push(
+        `${comment}\n		${prop.name}: context.getNodeParameter('${prop.name}', itemIndex, ${fallback}),`
       );
     }
   }
@@ -383,7 +408,7 @@ export async function runActorApi(
 	});
 }
 
-export async function runActor(this: IExecuteFunctions, i: number): Promise<INodeExecutionData> {
+export async function runActor(this: IExecuteFunctions, i: number): Promise<INodeExecutionData[]> {
 	const build = await getDefaultBuild.call(this, ACTOR_ID);
 	const defaultInput = getDefaultInputsFromBuild(build);
 	const mergedInput = buildActorInput(this, i, defaultInput);
@@ -401,10 +426,14 @@ export async function runActor(this: IExecuteFunctions, i: number): Promise<INod
 	const resultData = await getResults.call(this, datasetId);
 
 	if (isUsedAsAiTool(this.getNode().type)) {
-		return { json: { ...resultData } };
+		return Array.isArray(resultData) && resultData.length > 0 ? resultData : [{ json: {} }];
 	}
 
-	return { json: { ...lastRunData, ...resultData } };
+	if (Array.isArray(resultData) && resultData.length > 0) {
+		return resultData;
+	}
+
+	return [{ json: { ...lastRunData } }];
 }
 `;
 }
@@ -425,14 +454,22 @@ function getFixedCollectionParam(
 	paramName: string,
 	itemIndex: number,
 	optionName: string,
-	transformType: 'passthrough' | 'mapValues',
+	transformType: 'passthrough' | 'mapValues' | 'keyValue',
 ): Record<string, any> {
 	const param = context.getNodeParameter(paramName, itemIndex, {}) as { [key: string]: any[] };
 	if (!param?.[optionName]?.length) return {};
 
-	let result = param[optionName];
+	let result: any = param[optionName];
 	if (transformType === 'mapValues') {
 		result = result.map((item: any) => item.value);
+	} else if (transformType === 'keyValue') {
+		const kvObj: Record<string, any> = {};
+		for (const item of result) {
+			if (item.key !== undefined && item.key !== '') {
+				kvObj[item.key] = item.value;
+			}
+		}
+		result = kvObj;
 	}
 	return { [paramName]: result };
 }
@@ -440,7 +477,7 @@ function getFixedCollectionParam(
 
   const dateFn = usesDate ? `
 function getDateParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	const value = context.getNodeParameter(paramName, itemIndex);
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
 	if (value === undefined || value === null || value === '') return {};
 	const date = String(value).slice(0, 10);
 	return { [paramName]: date };
@@ -450,8 +487,8 @@ function getDateParam(context: IExecuteFunctions, paramName: string, itemIndex: 
   const jsonFn = usesJson ? `
 function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
 	try {
-		const rawValue = context.getNodeParameter(paramName, itemIndex);
-		if (typeof rawValue === 'string' && rawValue.trim() === '') {
+		const rawValue = context.getNodeParameter(paramName, itemIndex, undefined);
+		if (rawValue === undefined || rawValue === null || rawValue === '' || (typeof rawValue === 'string' && rawValue.trim() === '')) {
 			return {};
 		}
 		return { [paramName]: typeof rawValue === 'string' ? JSON.parse(rawValue) : rawValue };
@@ -463,7 +500,7 @@ function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: 
 
   const optionalFn = usesOptional ? `
 function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	const value = context.getNodeParameter(paramName, itemIndex);
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
 	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
 }
 ` : '';
@@ -526,6 +563,53 @@ function generateNodeJson(className: string, actorName: string): object {
   };
 }
 
+function downloadBuffer(url: string): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    const parsedUrl = new URL(url);
+    const client = parsedUrl.protocol === 'https:' ? https : http;
+    client.get(url, (res) => {
+      if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+        return downloadBuffer(res.headers.location).then(resolve).catch(reject);
+      }
+      if (res.statusCode !== 200) {
+        return reject(new Error(`Status ${res.statusCode}`));
+      }
+      const chunks: Buffer[] = [];
+      res.on('data', (chunk) => chunks.push(chunk));
+      res.on('end', () => resolve(Buffer.concat(chunks)));
+      res.on('error', reject);
+    }).on('error', reject);
+  });
+}
+
+const FALLBACK_SVG = `<svg width="60" height="60" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M86.0214 0H147.727C148.982 0 150 1.01753 150 2.27273V96.5744C150 98.8332 147.062 99.7089 145.826 97.8188L84.1196 3.51714C83.1305 2.00559 84.215 0 86.0214 0Z" fill="#246DFF"/>
+<path d="M63.9786 0H2.27273C1.01753 0 0 1.01753 0 2.27273V96.5744C0 98.8332 2.93774 99.7089 4.1745 97.8188L65.8804 3.51714C66.8695 2.00559 65.785 0 63.9786 0Z" fill="#20A34E"/>
+<path d="M73.9429 75.5012L3.84485 146.126C2.42137 147.56 3.43724 150 5.45792 150H144.6C146.612 150 147.632 147.578 146.225 146.139L77.1811 75.5135C76.2942 74.6063 74.8365 74.6008 73.9429 75.5012Z" fill="#F86606"/>
+</svg>`;
+
+async function generateLogoSvg(actor: any, nodeDir: string): Promise<void> {
+  const logoPath = path.join(nodeDir, 'logo.svg');
+  if (actor.pictureUrl) {
+    try {
+      const buf = await downloadBuffer(actor.pictureUrl);
+      const resized = await sharp(buf).resize(60, 60, { fit: 'cover' }).png().toBuffer();
+      const b64 = resized.toString('base64');
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60 60" width="60" height="60">
+  <image width="60" height="60" xlink:href="data:image/png;base64,${b64}"/>
+</svg>`;
+      fs.writeFileSync(logoPath, svg, 'utf-8');
+      console.log(chalk.green(`  🎨 Saved branded icon for ${actor.name}`));
+      return;
+    } catch (err) {
+      console.warn(chalk.yellow(`  ⚠️  Failed to fetch/resize pictureUrl for ${actor.name}, using fallback SVG: ${(err as Error).message}`));
+    }
+  }
+
+  fs.writeFileSync(logoPath, FALLBACK_SVG, 'utf-8');
+  console.log(chalk.gray(`  🎨 Saved fallback Apify icon for ${actor.name}`));
+}
+
 async function generateNode(client: ApifyClient, actorId: string, actorName: string): Promise<string> {
   const className = toClassName(actorName);
   const nodeDir = path.resolve(`./nodes/${className}`);
@@ -547,12 +631,8 @@ async function generateNode(client: ApifyClient, actorId: string, actorName: str
   fs.mkdirSync(nodeDir, { recursive: true });
   fs.mkdirSync(path.join(nodeDir, 'helpers'), { recursive: true });
 
-  // Create placeholder logo (replace with actual logo after generation)
-  const placeholderSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" width="60" height="60">
-  <rect width="60" height="60" rx="8" fill="#00AAFF"/>
-  <text x="30" y="38" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="middle">A</text>
-</svg>`;
-  fs.writeFileSync(path.join(nodeDir, 'logo.svg'), placeholderSvg);
+  // Generate branded or fallback logo.svg
+  await generateLogoSvg(actor, nodeDir);
 
   // Get properties from actor schema
   const properties = await createActorAppSchemaForN8n(client, actor) as INodeProperties[];
@@ -617,6 +697,13 @@ async function updatePackageJson(classNames: string[]) {
 
 async function main() {
   console.log(chalk.bold.cyan('\n🚀 Batch generating n8n nodes for Hypebridge actors...\n'));
+
+  // Remove obsolete directory nodes/ApifyBlindPostCommentsScraper
+  const obsoleteDir = path.resolve('./nodes/ApifyBlindPostCommentsScraper');
+  if (fs.existsSync(obsoleteDir)) {
+    console.log(chalk.yellow('  ⚠️  Removing obsolete directory nodes/ApifyBlindPostCommentsScraper...'));
+    fs.rmSync(obsoleteDir, { recursive: true });
+  }
 
   const client = new ApifyClient({
     token: process.env.APIFY_TOKEN,

@@ -8,35 +8,34 @@ import {
 import { properties } from './ApifyFindEvents.properties';
 import { runActor } from './helpers/executeActor';
 
-// SNIPPET 1: Make sure the constants are correct
+// SNIPPET 1: Actor schema constants
 export const ACTOR_ID = 'XIUAyRsGZ5I3g1kxi' as string;
 
-export const PACKAGE_NAME = 'n8n-nodes-find-events' as string;
+export const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors' as string;
 export const CLASS_NAME = 'ApifyFindEvents' as string;
-export const ClassNameCamel = CLASS_NAME.charAt(0).toLowerCase() + CLASS_NAME.slice(1); // make the first letter lowercase for name fields
+export const ClassNameCamel = 'apifyFindEvents' as string;
 
 export const X_PLATFORM_HEADER_ID = 'n8n' as string;
-export const X_PLATFORM_APP_HEADER_ID = 'find-events-app' as string;
+export const X_PLATFORM_APP_HEADER_ID = 'XIUAyRsGZ5I3g1kxi' as string;
 
-export const DISPLAY_NAME = 'Apify Find Events' as string;
-export const DESCRIPTION = 'Finds and normalizes local events across global and regional event platforms, automatically prioritizing sources with proven local affinity.' as string;
+export const DISPLAY_NAME = 'Find Events' as string;
+export const DESCRIPTION = 'Queries multiple event platforms for a given city and category, returning a single normalized dataset of scheduled events. Supported platforms include Eventbrite, Meetup, Luma, Dice, Eventnoire, Posh, Prekindle, and Shotgun.' as string;
 
 export class ApifyFindEvents implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: DISPLAY_NAME,
 		name: ClassNameCamel,
 
-		// SNIPPET 2: Adjust the icon of your app
+		// SNIPPET 2: Node icon
 		icon: 'file:logo.svg',
 		group: ['transform'],
-		// Mismatched version and defaultVersion as a minor hack to hide "Custom API Call" resource
 		version: [1],
 		defaultVersion: 1,
 
-		// SNIPPET 3: Adjust the subtitle for your Actor app.
-		subtitle: 'Run Scraper',
-		
-		// SNIPPET 4: Make sure the description is not too large, 1 sentence should be ideal.
+		// SNIPPET 3: Subtitle
+		subtitle: 'Run Actor',
+
+		// SNIPPET 4: Node description
 		description: DESCRIPTION,
 		defaults: {
 			name: DISPLAY_NAME,

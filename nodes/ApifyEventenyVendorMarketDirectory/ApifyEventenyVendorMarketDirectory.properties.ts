@@ -5,20 +5,28 @@ function getFixedCollectionParam(
 	paramName: string,
 	itemIndex: number,
 	optionName: string,
-	transformType: 'passthrough' | 'mapValues',
+	transformType: 'passthrough' | 'mapValues' | 'keyValue',
 ): Record<string, any> {
 	const param = context.getNodeParameter(paramName, itemIndex, {}) as { [key: string]: any[] };
 	if (!param?.[optionName]?.length) return {};
 
-	let result = param[optionName];
+	let result: any = param[optionName];
 	if (transformType === 'mapValues') {
 		result = result.map((item: any) => item.value);
+	} else if (transformType === 'keyValue') {
+		const kvObj: Record<string, any> = {};
+		for (const item of result) {
+			if (item.key !== undefined && item.key !== '') {
+				kvObj[item.key] = item.value;
+			}
+		}
+		result = kvObj;
 	}
 	return { [paramName]: result };
 }
 
 function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	const value = context.getNodeParameter(paramName, itemIndex);
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
 	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
 }
 
@@ -32,27 +40,27 @@ export function buildActorInput(
 		// Start URLs (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
 		// Maximum items (maxItems)
-		maxItems: context.getNodeParameter('maxItems', itemIndex),
+		maxItems: context.getNodeParameter('maxItems', itemIndex, 200),
 		// Scrape detail pages (getDetails)
-		getDetails: context.getNodeParameter('getDetails', itemIndex),
+		getDetails: context.getNodeParameter('getDetails', itemIndex, true),
 		// Search keywords (searchQuery)
 		...getOptionalParam(context, 'searchQuery', itemIndex),
 		// Application type (applicationType)
-		applicationType: context.getNodeParameter('applicationType', itemIndex),
+		...getOptionalParam(context, 'applicationType', itemIndex),
 		// Event category (category)
-		category: context.getNodeParameter('category', itemIndex),
+		...getOptionalParam(context, 'category', itemIndex),
 		// Month (month)
 		...getOptionalParam(context, 'month', itemIndex),
 		// Location filter (locationFilter)
 		...getOptionalParam(context, 'locationFilter', itemIndex),
 		// Include ticket tiers (includeTicketTiers)
-		includeTicketTiers: context.getNodeParameter('includeTicketTiers', itemIndex),
+		includeTicketTiers: context.getNodeParameter('includeTicketTiers', itemIndex, false),
 		// Include organizer profiles (scrapeOrganizers)
-		scrapeOrganizers: context.getNodeParameter('scrapeOrganizers', itemIndex),
+		scrapeOrganizers: context.getNodeParameter('scrapeOrganizers', itemIndex, false),
 		// Maximum concurrency (maxConcurrency)
-		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex),
+		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex, 10),
 		// Debug mode (debugMode)
-		debugMode: context.getNodeParameter('debugMode', itemIndex),
+		debugMode: context.getNodeParameter('debugMode', itemIndex, false),
 	};
 }
 
@@ -119,13 +127,13 @@ export const actorProperties: INodeProperties[] = [
     "name": "getDetails",
     "description": "Open discovered events and applications for booth fee tables, deadlines, terms, files, questions, venue details, and organizer data. Direct detail URLs are always fully scraped.",
     "required": false,
-    "default": false,
+    "default": true,
     "type": "boolean"
   },
   {
     "displayName": "Search keywords",
     "name": "searchQuery",
-    "description": "Keyword filter for directory start URLs without their own ?search= or ?q= value.",
+    "description": "Keyword filter for directory start URLs without their own ?search= or ?q= value. If Eventeny finds nothing for a multi-word phrase, the Actor retries up to five individual keywords and combines unique matches.",
     "required": false,
     "default": "craft fair",
     "type": "string"

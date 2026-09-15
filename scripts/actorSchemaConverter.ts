@@ -88,7 +88,7 @@ function getPropsForTypeN8n(field: ApifyInputField): Partial<INodeProperties> & 
         case 'integer':
             return {
                 type: 'number',
-                default: field.default ?? 0,
+                default: field.default ?? field.prefill ?? 0,
                 typeOptions: {
                     ...(field.minimum !== undefined ? { minValue: field.minimum } : {}),
                     ...(field.maximum !== undefined ? { maxValue: field.maximum } : {}),
@@ -98,7 +98,7 @@ function getPropsForTypeN8n(field: ApifyInputField): Partial<INodeProperties> & 
         case 'number':
             return {
                 type: 'number',
-                default: field.default ?? 0,
+                default: field.default ?? field.prefill ?? 0,
                 typeOptions: {
                     ...(field.minimum !== undefined ? { minValue: field.minimum } : {}),
                     ...(field.maximum !== undefined ? { maxValue: field.maximum } : {}),
@@ -168,7 +168,7 @@ function getPropsForTypeN8n(field: ApifyInputField): Partial<INodeProperties> & 
                 return {
                     type: 'multiOptions',
                     options,
-                    default: [],
+                    default: field.default ?? field.prefill ?? [],
                 };
             }
             if (field.editor === 'keyValue') {

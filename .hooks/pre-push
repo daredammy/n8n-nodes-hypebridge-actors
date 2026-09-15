@@ -36,7 +36,7 @@ Rules:
 
 Respond with ONLY one word: patch, minor, major, or none"
 
-VERSION_TYPE=$(claude -p "$PROMPT" --model haiku 2>/dev/null | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
+VERSION_TYPE=$(claude -p "$PROMPT" --model haiku < /dev/null 2>/dev/null | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
 
 echo "Claude suggests: $VERSION_TYPE"
 

@@ -1,5 +1,5 @@
 {
-  "node": "n8n-nodes-base.apifyBlindPostCommentsScraper",
+  "node": "n8n-nodes-base.apifyEconomicCalendarApi",
   "nodeVersion": "1.0",
   "codexVersion": "1.0",
   "categories": [
@@ -9,12 +9,12 @@
   "resources": {
     "primaryDocumentation": [
       {
-        "url": "https://apify.com/hypebridge/blind-post-comments-scraper"
+        "url": "https://apify.com/hypebridge/economic-calendar-api"
       }
     ]
   },
   "alias": [
-    "blind post comments scraper",
+    "economic calendar api",
     "apify",
     "scraper",
     "automation",

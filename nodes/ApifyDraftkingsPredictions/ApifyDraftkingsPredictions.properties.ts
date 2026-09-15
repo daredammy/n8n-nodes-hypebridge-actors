@@ -2,8 +2,8 @@ import { IExecuteFunctions, INodeProperties } from 'n8n-workflow';
 
 function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
 	try {
-		const rawValue = context.getNodeParameter(paramName, itemIndex);
-		if (typeof rawValue === 'string' && rawValue.trim() === '') {
+		const rawValue = context.getNodeParameter(paramName, itemIndex, undefined);
+		if (rawValue === undefined || rawValue === null || rawValue === '' || (typeof rawValue === 'string' && rawValue.trim() === '')) {
 			return {};
 		}
 		return { [paramName]: typeof rawValue === 'string' ? JSON.parse(rawValue) : rawValue };
@@ -13,7 +13,7 @@ function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: 
 }
 
 function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	const value = context.getNodeParameter(paramName, itemIndex);
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
 	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
 }
 
@@ -25,13 +25,13 @@ export function buildActorInput(
 	return {
 		...defaultInput,
 		// Sports / Category (sportsCategory)
-		sportsCategory: context.getNodeParameter('sportsCategory', itemIndex),
+		sportsCategory: context.getNodeParameter('sportsCategory', itemIndex, ["featured"]),
 		// Subcategory (subcategory)
 		...getOptionalParam(context, 'subcategory', itemIndex),
 		// Maximum Results (maxResults)
-		maxResults: context.getNodeParameter('maxResults', itemIndex),
+		maxResults: context.getNodeParameter('maxResults', itemIndex, 20),
 		// Include More Markets (includeMoreMarkets)
-		includeMoreMarkets: context.getNodeParameter('includeMoreMarkets', itemIndex),
+		includeMoreMarkets: context.getNodeParameter('includeMoreMarkets', itemIndex, true),
 		// Proxy Configuration (proxyConfiguration)
 		...getJsonParam(context, 'proxyConfiguration', itemIndex),
 	};
@@ -63,7 +63,9 @@ export const actorProperties: INodeProperties[] = [
     "name": "sportsCategory",
     "description": "Categories to scrape. Matches either a DraftKings Predictions category (e.g. crypto, politics) or a league directly (e.g. nfl, bitcoin). Leagues are resolved against the live catalogue at run time, so newly listed ones work without an update. Leave empty for everything.",
     "required": true,
-    "default": [],
+    "default": [
+      "featured"
+    ],
     "type": "multiOptions",
     "options": [
       {

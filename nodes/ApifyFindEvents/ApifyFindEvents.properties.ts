@@ -1,37 +1,7 @@
 import { IExecuteFunctions, INodeProperties } from 'n8n-workflow';
 
-// Helper functions for parameter extraction
-export function getFixedCollectionParam(
-	context: IExecuteFunctions,
-	paramName: string,
-	itemIndex: number,
-	optionName: string,
-	transformType: 'passthrough' | 'mapValues',
-): Record<string, any> {
-	const param = context.getNodeParameter(paramName, itemIndex, {}) as { [key: string]: any[] };
-	if (!param?.[optionName]?.length) return {};
-
-	let result = param[optionName];
-	if (transformType === 'mapValues') {
-		result = result.map((item: any) => item.value);
-	}
-	return { [paramName]: result };
-}
-
-export function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	try {
-		const rawValue = context.getNodeParameter(paramName, itemIndex);
-		if (typeof rawValue === 'string' && rawValue.trim() === '') {
-			return {};
-		}
-		return { [paramName]: typeof rawValue === 'string' ? JSON.parse(rawValue) : rawValue };
-	} catch (error) {
-		throw new Error(`Invalid JSON in parameter "${paramName}": ${(error as Error).message}`);
-	}
-}
-
-export function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	const value = context.getNodeParameter(paramName, itemIndex);
+function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
 	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
 }
 
@@ -40,24 +10,28 @@ export function buildActorInput(
 	itemIndex: number,
 	defaultInput: Record<string, any>,
 ): Record<string, any> {
+	const rawSelectedPlatforms = context.getNodeParameter('platforms', itemIndex, []);
+	const selectedPlatforms = Array.isArray(rawSelectedPlatforms)
+		? rawSelectedPlatforms.filter((value): value is string => typeof value === 'string' && value.length > 0)
+		: [];
 	return {
 		...defaultInput,
 		// Category (category)
-		category: context.getNodeParameter('category', itemIndex),
+		category: context.getNodeParameter('category', itemIndex, "all"),
 		// City (city)
-		city: context.getNodeParameter('city', itemIndex),
+		city: context.getNodeParameter('city', itemIndex, "Dallas, TX"),
 		// Time window (timeWindow)
-		timeWindow: context.getNodeParameter('timeWindow', itemIndex),
+		...getOptionalParam(context, 'timeWindow', itemIndex),
 		// Max events (maxEvents)
-		maxEvents: context.getNodeParameter('maxEvents', itemIndex),
+		maxEvents: context.getNodeParameter('maxEvents', itemIndex, 50),
 		// Get event details (getEventDetails)
-		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex),
+		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex, false),
 		// Platforms (platforms)
-		platforms: context.getNodeParameter('platforms', itemIndex),
+		...(selectedPlatforms.length > 0 ? { platforms: selectedPlatforms } : {}),
 		// Child run timeout (childRunTimeoutSecs)
-		childRunTimeoutSecs: context.getNodeParameter('childRunTimeoutSecs', itemIndex),
+		childRunTimeoutSecs: context.getNodeParameter('childRunTimeoutSecs', itemIndex, 240),
 		// Debug mode (debugMode)
-		debugMode: context.getNodeParameter('debugMode', itemIndex),
+		debugMode: context.getNodeParameter('debugMode', itemIndex, false),
 	};
 }
 
@@ -193,23 +167,9 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Platforms",
     "name": "platforms",
-    "description": "Optional source allowlist. Regional sources are automatically used only where they serve the requested city or country.",
+    "description": "Optional source allowlist. Leave empty for Auto; select values only to restrict the search.",
     "required": false,
-    "default": [
-      "luma",
-      "meetup",
-      "partiful",
-      "dice",
-      "eventnoire",
-      "posh",
-      "prekindle",
-      "shotgun",
-      "eventbrite",
-      "showpass",
-      "sympla",
-      "runsignup",
-      "eventeny"
-    ],
+    "default": [],
     "type": "multiOptions",
     "options": [
       {

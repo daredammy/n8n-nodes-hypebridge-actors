@@ -5,28 +5,41 @@ function getFixedCollectionParam(
 	paramName: string,
 	itemIndex: number,
 	optionName: string,
-	transformType: 'passthrough' | 'mapValues',
+	transformType: 'passthrough' | 'mapValues' | 'keyValue',
 ): Record<string, any> {
 	const param = context.getNodeParameter(paramName, itemIndex, {}) as { [key: string]: any[] };
 	if (!param?.[optionName]?.length) return {};
 
-	let result = param[optionName];
+	let result: any = param[optionName];
 	if (transformType === 'mapValues') {
 		result = result.map((item: any) => item.value);
+	} else if (transformType === 'keyValue') {
+		const kvObj: Record<string, any> = {};
+		for (const item of result) {
+			if (item.key !== undefined && item.key !== '') {
+				kvObj[item.key] = item.value;
+			}
+		}
+		result = kvObj;
 	}
 	return { [paramName]: result };
 }
 
 function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
 	try {
-		const rawValue = context.getNodeParameter(paramName, itemIndex);
-		if (typeof rawValue === 'string' && rawValue.trim() === '') {
+		const rawValue = context.getNodeParameter(paramName, itemIndex, undefined);
+		if (rawValue === undefined || rawValue === null || rawValue === '' || (typeof rawValue === 'string' && rawValue.trim() === '')) {
 			return {};
 		}
 		return { [paramName]: typeof rawValue === 'string' ? JSON.parse(rawValue) : rawValue };
 	} catch (error) {
 		throw new Error(`Invalid JSON in parameter "${paramName}": ${(error as Error).message}`);
 	}
+}
+
+function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
+	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
 }
 
 export function buildActorInput(
@@ -39,27 +52,27 @@ export function buildActorInput(
 		// Start URLs (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
 		// Max agency leads (maxItems)
-		maxItems: context.getNodeParameter('maxItems', itemIndex),
+		maxItems: context.getNodeParameter('maxItems', itemIndex, 100),
 		// Get agency details (getAgencyDetails)
-		getAgencyDetails: context.getNodeParameter('getAgencyDetails', itemIndex),
+		getAgencyDetails: context.getNodeParameter('getAgencyDetails', itemIndex, false),
 		// Include reviews (includeReviews)
-		includeReviews: context.getNodeParameter('includeReviews', itemIndex),
+		includeReviews: context.getNodeParameter('includeReviews', itemIndex, false),
 		// Find emails on agency websites (enrichEmails)
-		enrichEmails: context.getNodeParameter('enrichEmails', itemIndex),
+		enrichEmails: context.getNodeParameter('enrichEmails', itemIndex, false),
 		// Max reviews per agency (maxReviewsPerAgency)
-		maxReviewsPerAgency: context.getNodeParameter('maxReviewsPerAgency', itemIndex),
+		maxReviewsPerAgency: context.getNodeParameter('maxReviewsPerAgency', itemIndex, 3),
 		// Output format (outputFormat)
-		outputFormat: context.getNodeParameter('outputFormat', itemIndex),
+		...getOptionalParam(context, 'outputFormat', itemIndex),
 		// Sort by (sortBy)
-		sortBy: context.getNodeParameter('sortBy', itemIndex),
+		...getOptionalParam(context, 'sortBy', itemIndex),
 		// Max listing pages (maxPages)
-		maxPages: context.getNodeParameter('maxPages', itemIndex),
+		maxPages: context.getNodeParameter('maxPages', itemIndex, 25),
 		// Max concurrency (maxConcurrency)
-		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex),
+		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex, 8),
 		// Proxy configuration (proxyConfiguration)
 		...getJsonParam(context, 'proxyConfiguration', itemIndex),
 		// Debug mode (debugMode)
-		debugMode: context.getNodeParameter('debugMode', itemIndex),
+		debugMode: context.getNodeParameter('debugMode', itemIndex, false),
 	};
 }
 

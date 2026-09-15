@@ -1,5 +1,10 @@
 import { IExecuteFunctions, INodeProperties } from 'n8n-workflow';
 
+function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
+	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
+}
+
 export function buildActorInput(
 	context: IExecuteFunctions,
 	itemIndex: number,
@@ -8,9 +13,9 @@ export function buildActorInput(
 	return {
 		...defaultInput,
 		// Influencer Handle (influencerHandle)
-		influencerHandle: context.getNodeParameter('influencerHandle', itemIndex),
+		influencerHandle: context.getNodeParameter('influencerHandle', itemIndex, "natgeo"),
 		// Platform (platform)
-		platform: context.getNodeParameter('platform', itemIndex),
+		...getOptionalParam(context, 'platform', itemIndex),
 	};
 }
 
@@ -38,7 +43,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Influencer Handle",
     "name": "influencerHandle",
-    "description": "The Instagram or TikTok handle of the influencer to evaluate (e.g., 'natgeo' or '@natgeo'). The @ symbol is optional, and a full profile URL such as 'https://www.instagram.com/natgeo' is also accepted.",
+    "description": "One Instagram or TikTok handle or matching profile URL. Instagram handles allow 1-30 letters, numbers, periods, or underscores; periods cannot lead, trail, or repeat. TikTok handles allow 1-24 letters, numbers, periods, or underscores; a period cannot be last.",
     "required": true,
     "default": "natgeo",
     "type": "string"

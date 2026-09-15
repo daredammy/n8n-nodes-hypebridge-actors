@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifyAdaptiveWebScraper",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/adaptive-web-scraper"
+      }
+    ]
+  },
+  "alias": [
+    "adaptive web scraper",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}

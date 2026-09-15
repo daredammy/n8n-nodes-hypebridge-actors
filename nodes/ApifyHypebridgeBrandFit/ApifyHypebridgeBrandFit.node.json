@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifyHypebridgeBrandFit",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/hypebridge-brand-fit"
+      }
+    ]
+  },
+  "alias": [
+    "hypebridge brand fit",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}

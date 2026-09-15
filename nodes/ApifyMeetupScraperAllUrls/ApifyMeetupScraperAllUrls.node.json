@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifyMeetupScraperAllUrls",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/meetup-scraper-all-urls"
+      }
+    ]
+  },
+  "alias": [
+    "meetup scraper all urls",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}

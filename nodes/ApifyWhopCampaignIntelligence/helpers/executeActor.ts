@@ -1,7 +1,7 @@
 import { IExecuteFunctions, INodeExecutionData, NodeApiError } from 'n8n-workflow';
 import { apiRequest, getResults, isUsedAsAiTool, pollRunStatus } from './genericFunctions';
-import { ACTOR_ID } from '../ApifyBlindPostCommentsScraper.node';
-import { buildActorInput } from '../ApifyBlindPostCommentsScraper.properties';
+import { ACTOR_ID } from '../ApifyWhopCampaignIntelligence.node';
+import { buildActorInput } from '../ApifyWhopCampaignIntelligence.properties';
 
 export async function getDefaultBuild(this: IExecuteFunctions, actorId: string) {
 	const defaultBuildResp = await apiRequest.call(this, {
@@ -49,7 +49,7 @@ export async function runActorApi(
 	});
 }
 
-export async function runActor(this: IExecuteFunctions, i: number): Promise<INodeExecutionData> {
+export async function runActor(this: IExecuteFunctions, i: number): Promise<INodeExecutionData[]> {
 	const build = await getDefaultBuild.call(this, ACTOR_ID);
 	const defaultInput = getDefaultInputsFromBuild(build);
 	const mergedInput = buildActorInput(this, i, defaultInput);
@@ -67,8 +67,12 @@ export async function runActor(this: IExecuteFunctions, i: number): Promise<INod
 	const resultData = await getResults.call(this, datasetId);
 
 	if (isUsedAsAiTool(this.getNode().type)) {
-		return { json: { ...resultData } };
+		return Array.isArray(resultData) && resultData.length > 0 ? resultData : [{ json: {} }];
 	}
 
-	return { json: { ...lastRunData, ...resultData } };
+	if (Array.isArray(resultData) && resultData.length > 0) {
+		return resultData;
+	}
+
+	return [{ json: { ...lastRunData } }];
 }

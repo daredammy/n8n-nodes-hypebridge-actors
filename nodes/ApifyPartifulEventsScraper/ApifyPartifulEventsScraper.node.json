@@ -1,38 +1,23 @@
 {
-	"node": "n8n-nodes-partiful-events-scraper",
-	"nodeVersion": "1.0",
-	"codexVersion": "1.0",
-	"categories": [
-		"Development",
-		"Marketing & Content",
-		"Sales",
-		"Analytics",
-		"Utility",
-		"Data & Storage"
-	],
-	"resources": {
-		"credentialDocumentation": [
-			{
-				"url": "https://docs.apify.com/platform/integrations/n8n"
-			}
-		],
-		"primaryDocumentation": [
-			{
-				"url": "https://docs.apify.com/"
-			}
-		]
-	},
-	"alias": [
-		"apify",
-		"actor",
-		"serp",
-		"llm",
-		"ai agent",
-		"scrape",
-		"crawler",
-		"web",
-		"dataset",
-		"search",
-		"data extraction"
-	]
+  "node": "n8n-nodes-base.apifyPartifulEventsScraper",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/partiful-events-scraper"
+      }
+    ]
+  },
+  "alias": [
+    "partiful events scraper",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
 }

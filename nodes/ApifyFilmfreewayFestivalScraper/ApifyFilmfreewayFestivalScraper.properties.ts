@@ -5,20 +5,28 @@ function getFixedCollectionParam(
 	paramName: string,
 	itemIndex: number,
 	optionName: string,
-	transformType: 'passthrough' | 'mapValues',
+	transformType: 'passthrough' | 'mapValues' | 'keyValue',
 ): Record<string, any> {
 	const param = context.getNodeParameter(paramName, itemIndex, {}) as { [key: string]: any[] };
 	if (!param?.[optionName]?.length) return {};
 
-	let result = param[optionName];
+	let result: any = param[optionName];
 	if (transformType === 'mapValues') {
 		result = result.map((item: any) => item.value);
+	} else if (transformType === 'keyValue') {
+		const kvObj: Record<string, any> = {};
+		for (const item of result) {
+			if (item.key !== undefined && item.key !== '') {
+				kvObj[item.key] = item.value;
+			}
+		}
+		result = kvObj;
 	}
 	return { [paramName]: result };
 }
 
 function getDateParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	const value = context.getNodeParameter(paramName, itemIndex);
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
 	if (value === undefined || value === null || value === '') return {};
 	const date = String(value).slice(0, 10);
 	return { [paramName]: date };
@@ -26,8 +34,8 @@ function getDateParam(context: IExecuteFunctions, paramName: string, itemIndex: 
 
 function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
 	try {
-		const rawValue = context.getNodeParameter(paramName, itemIndex);
-		if (typeof rawValue === 'string' && rawValue.trim() === '') {
+		const rawValue = context.getNodeParameter(paramName, itemIndex, undefined);
+		if (rawValue === undefined || rawValue === null || rawValue === '' || (typeof rawValue === 'string' && rawValue.trim() === '')) {
 			return {};
 		}
 		return { [paramName]: typeof rawValue === 'string' ? JSON.parse(rawValue) : rawValue };
@@ -37,7 +45,7 @@ function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: 
 }
 
 function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	const value = context.getNodeParameter(paramName, itemIndex);
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
 	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
 }
 
@@ -51,11 +59,11 @@ export function buildActorInput(
 		// Start URLs (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
 		// Maximum festivals (maxFestivals)
-		maxFestivals: context.getNodeParameter('maxFestivals', itemIndex),
+		maxFestivals: context.getNodeParameter('maxFestivals', itemIndex, 100),
 		// Get deadlines and entry fees (getFestivalDetails)
-		getFestivalDetails: context.getNodeParameter('getFestivalDetails', itemIndex),
+		getFestivalDetails: context.getNodeParameter('getFestivalDetails', itemIndex, false),
 		// Open submissions only (openSubmissionsOnly)
-		openSubmissionsOnly: context.getNodeParameter('openSubmissionsOnly', itemIndex),
+		openSubmissionsOnly: context.getNodeParameter('openSubmissionsOnly', itemIndex, true),
 		// Search keyword (searchQuery)
 		...getOptionalParam(context, 'searchQuery', itemIndex),
 		// Entry deadline before (deadlineBefore)
@@ -67,29 +75,29 @@ export function buildActorInput(
 		// Event date after (eventDateAfter)
 		...getDateParam(context, 'eventDateAfter', itemIndex),
 		// Project categories (projectCategories)
-		projectCategories: context.getNodeParameter('projectCategories', itemIndex),
+		projectCategories: context.getNodeParameter('projectCategories', itemIndex, []),
 		// Genres and niches (niches)
-		niches: context.getNodeParameter('niches', itemIndex),
+		niches: context.getNodeParameter('niches', itemIndex, []),
 		// Maximum entry fee (maxEntryFee)
-		maxEntryFee: context.getNodeParameter('maxEntryFee', itemIndex),
+		maxEntryFee: context.getNodeParameter('maxEntryFee', itemIndex, 0),
 		// Academy Award qualifying only (academyAwardQualifyingOnly)
-		academyAwardQualifyingOnly: context.getNodeParameter('academyAwardQualifyingOnly', itemIndex),
+		academyAwardQualifyingOnly: context.getNodeParameter('academyAwardQualifyingOnly', itemIndex, false),
 		// FilmFreeway Gold discount only (goldDiscountOnly)
-		goldDiscountOnly: context.getNodeParameter('goldDiscountOnly', itemIndex),
+		goldDiscountOnly: context.getNodeParameter('goldDiscountOnly', itemIndex, false),
 		// Countries (countries)
 		...getFixedCollectionParam(context, 'countries', itemIndex, 'values', 'mapValues'),
 		// Sort by (sortBy)
-		sortBy: context.getNodeParameter('sortBy', itemIndex),
+		...getOptionalParam(context, 'sortBy', itemIndex),
 		// Curated collection (curatedCollection)
-		curatedCollection: context.getNodeParameter('curatedCollection', itemIndex),
+		...getOptionalParam(context, 'curatedCollection', itemIndex),
 		// Enumerate from sitemap (enumerateFromSitemap)
-		enumerateFromSitemap: context.getNodeParameter('enumerateFromSitemap', itemIndex),
+		enumerateFromSitemap: context.getNodeParameter('enumerateFromSitemap', itemIndex, false),
 		// Maximum sticky sessions (maxConcurrency)
-		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex),
+		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex, 3),
 		// Proxy configuration (proxyConfiguration)
 		...getJsonParam(context, 'proxyConfiguration', itemIndex),
 		// Debug mode (debugMode)
-		debugMode: context.getNodeParameter('debugMode', itemIndex),
+		debugMode: context.getNodeParameter('debugMode', itemIndex, false),
 	};
 }
 

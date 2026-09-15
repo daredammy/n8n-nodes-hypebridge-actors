@@ -5,20 +5,28 @@ function getFixedCollectionParam(
 	paramName: string,
 	itemIndex: number,
 	optionName: string,
-	transformType: 'passthrough' | 'mapValues',
+	transformType: 'passthrough' | 'mapValues' | 'keyValue',
 ): Record<string, any> {
 	const param = context.getNodeParameter(paramName, itemIndex, {}) as { [key: string]: any[] };
 	if (!param?.[optionName]?.length) return {};
 
-	let result = param[optionName];
+	let result: any = param[optionName];
 	if (transformType === 'mapValues') {
 		result = result.map((item: any) => item.value);
+	} else if (transformType === 'keyValue') {
+		const kvObj: Record<string, any> = {};
+		for (const item of result) {
+			if (item.key !== undefined && item.key !== '') {
+				kvObj[item.key] = item.value;
+			}
+		}
+		result = kvObj;
 	}
 	return { [paramName]: result };
 }
 
 function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	const value = context.getNodeParameter(paramName, itemIndex);
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
 	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
 }
 
@@ -30,15 +38,15 @@ export function buildActorInput(
 	return {
 		...defaultInput,
 		// Influencer Description (request)
-		request: context.getNodeParameter('request', itemIndex),
+		request: context.getNodeParameter('request', itemIndex, "Fashion influencer on Instagram with 100k+ followers who focuses on sustainable clothing and lifestyle"),
 		// Target Quantity (targetQuantity)
-		targetQuantity: context.getNodeParameter('targetQuantity', itemIndex),
+		targetQuantity: context.getNodeParameter('targetQuantity', itemIndex, 10),
 		// Exclude Accounts (excludeHandles)
 		...getFixedCollectionParam(context, 'excludeHandles', itemIndex, 'values', 'mapValues'),
 		// Platform (platform)
-		platform: context.getNodeParameter('platform', itemIndex),
+		...getOptionalParam(context, 'platform', itemIndex),
 		// Minimum Followers (minFollowers)
-		minFollowers: context.getNodeParameter('minFollowers', itemIndex),
+		minFollowers: context.getNodeParameter('minFollowers', itemIndex, 50000),
 		// Location (location)
 		...getOptionalParam(context, 'location', itemIndex),
 		// Similar To — Instagram Seeds (seedHandlesInstagram)
@@ -144,7 +152,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "minFollowers",
     "description": "Minimum follower count (optional filter).",
     "required": false,
-    "default": 0,
+    "default": 50000,
     "type": "number",
     "typeOptions": {
       "minValue": 0,

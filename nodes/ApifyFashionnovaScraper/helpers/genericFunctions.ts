@@ -7,7 +7,7 @@ import {
 	type ILoadOptionsFunctions,
 	type IHttpRequestOptions,
 } from 'n8n-workflow';
-import { ClassNameCamel, X_PLATFORM_APP_HEADER_ID, X_PLATFORM_HEADER_ID } from '../ApifyBlindPostCommentsScraper.node';
+import { ClassNameCamel, X_PLATFORM_APP_HEADER_ID, X_PLATFORM_HEADER_ID } from '../ApifyFashionnovaScraper.node';
 
 type IApiRequestOptions = Omit<IHttpRequestOptions, 'url'> & {
 	uri?: string;
