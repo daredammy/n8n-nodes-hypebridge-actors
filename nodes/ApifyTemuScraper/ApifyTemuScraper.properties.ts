@@ -34,14 +34,12 @@ export function buildActorInput(
 		...defaultInput,
 		// Start URLs (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
-		// Maximum Events Per URL (maxEvents)
-		maxEvents: context.getNodeParameter('maxEvents', itemIndex, 25),
-		// Scrape Full Event Details (scrapeEventDetails)
-		scrapeEventDetails: context.getNodeParameter('scrapeEventDetails', itemIndex, true),
-		// Location latitude (latitude)
-		latitude: context.getNodeParameter('latitude', itemIndex, 0),
-		// Location longitude (longitude)
-		longitude: context.getNodeParameter('longitude', itemIndex, 0),
+		// Max items (maxItems)
+		maxItems: context.getNodeParameter('maxItems', itemIndex, 40),
+		// Get product details (enrich from PDP) (getProductDetails)
+		getProductDetails: context.getNodeParameter('getProductDetails', itemIndex, false),
+		// Extract customer reviews (PDP) (extractReviews)
+		extractReviews: context.getNodeParameter('extractReviews', itemIndex, false),
 	};
 }
 
@@ -69,8 +67,8 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Start URLs",
     "name": "startUrls",
-    "description": "Luma URLs to scrape. Supports direct event pages, category pages, city/place pages, calendar/community pages, discover, and user profile URLs.",
-    "required": true,
+    "description": "Temu URLs to scrape: Homepage, Product Detail pages, Category catalogs, Store pages, or Deals channels. Search result URLs are NOT supported and will be rejected - Temu serves search only from a prerender cache that cannot be warmed on demand.",
+    "required": false,
     "default": {},
     "type": "fixedCollection",
     "typeOptions": {
@@ -92,47 +90,32 @@ export const actorProperties: INodeProperties[] = [
     ]
   },
   {
-    "displayName": "Maximum Events Per URL",
-    "name": "maxEvents",
-    "description": "Maximum number of events to scrape per start URL. Set to 0 for unlimited pagination.",
-    "required": false,
-    "default": 25,
+    "displayName": "Max items",
+    "name": "maxItems",
+    "description": "Maximum number of product items/records to extract across the run.",
+    "required": true,
+    "default": 40,
     "type": "number",
     "typeOptions": {
-      "minValue": 0
+      "minValue": 1,
+      "maxValue": 5000
     }
   },
   {
-    "displayName": "Scrape Full Event Details",
-    "name": "scrapeEventDetails",
-    "description": "When enabled, fetches `/event/get` for each discovered event and returns description, ticket tiers, categories, registration questions, availability, and other high-signal metadata. Additional charges apply per detailed event pushed.",
+    "displayName": "Get product details (enrich from PDP)",
+    "name": "getProductDetails",
+    "description": "When scraping search results, categories, or home feeds, automatically fetch each product's full PDP page for SKU variant matrix, high-resolution galleries, and specifications.",
     "required": false,
-    "default": true,
+    "default": false,
     "type": "boolean"
   },
   {
-    "displayName": "Location latitude",
-    "name": "latitude",
-    "description": "Optional coordinate override for discover and category URLs. Use with longitude to search a city without relying on Luma's non-obvious city slugs.",
+    "displayName": "Extract customer reviews (PDP)",
+    "name": "extractReviews",
+    "description": "When scraping Product Detail Pages (PDP), also extract top buyer reviews, star ratings, and buyer photos into the dataset.",
     "required": false,
-    "default": 0,
-    "type": "number",
-    "typeOptions": {
-      "minValue": -90,
-      "maxValue": 90
-    }
-  },
-  {
-    "displayName": "Location longitude",
-    "name": "longitude",
-    "description": "Optional coordinate override for discover and category URLs. Use with latitude.",
-    "required": false,
-    "default": 0,
-    "type": "number",
-    "typeOptions": {
-      "minValue": -180,
-      "maxValue": 180
-    }
+    "default": false,
+    "type": "boolean"
   }
 ];
 

@@ -56,6 +56,10 @@ export function buildActorInput(
 		...getJsonParam(context, 'proxyConfiguration', itemIndex),
 		// Debug mode (debugMode)
 		debugMode: context.getNodeParameter('debugMode', itemIndex, false),
+		// Location latitude (latitude)
+		latitude: context.getNodeParameter('latitude', itemIndex, 0),
+		// Location longitude (longitude)
+		longitude: context.getNodeParameter('longitude', itemIndex, 0),
 	};
 }
 
@@ -151,6 +155,30 @@ export const actorProperties: INodeProperties[] = [
     "required": false,
     "default": false,
     "type": "boolean"
+  },
+  {
+    "displayName": "Location latitude",
+    "name": "latitude",
+    "description": "Optional latitude used to recover search pagination when Meetup omits coordinates from its embedded page state.",
+    "required": false,
+    "default": 0,
+    "type": "number",
+    "typeOptions": {
+      "minValue": -90,
+      "maxValue": 90
+    }
+  },
+  {
+    "displayName": "Location longitude",
+    "name": "longitude",
+    "description": "Optional longitude used with latitude to recover search pagination.",
+    "required": false,
+    "default": 0,
+    "type": "number",
+    "typeOptions": {
+      "minValue": -180,
+      "maxValue": 180
+    }
   }
 ];
 

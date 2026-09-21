@@ -25,6 +25,13 @@ function getFixedCollectionParam(
 	return { [paramName]: result };
 }
 
+function getDateParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
+	if (value === undefined || value === null || value === '') return {};
+	const date = String(value).slice(0, 10);
+	return { [paramName]: date };
+}
+
 function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
 	const value = context.getNodeParameter(paramName, itemIndex, undefined);
 	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
@@ -43,6 +50,10 @@ export function buildActorInput(
 		maxEvents: context.getNodeParameter('maxEvents', itemIndex, 30),
 		// Scrape Full Event Details (scrapeEventDetails)
 		scrapeEventDetails: context.getNodeParameter('scrapeEventDetails', itemIndex, false),
+		// Start date (startDate)
+		...getDateParam(context, 'startDate', itemIndex),
+		// End date (endDate)
+		...getDateParam(context, 'endDate', itemIndex),
 		// Proxy Country (proxyCountryCode)
 		...getOptionalParam(context, 'proxyCountryCode', itemIndex),
 	};
@@ -113,6 +124,22 @@ export const actorProperties: INodeProperties[] = [
     "required": false,
     "default": false,
     "type": "boolean"
+  },
+  {
+    "displayName": "Start date",
+    "name": "startDate",
+    "description": "Optional inclusive start date for city pages. The scraper anchors Shotgun at this date and follows View more until the end date or another bounded stop condition.",
+    "required": false,
+    "default": "",
+    "type": "dateTime"
+  },
+  {
+    "displayName": "End date",
+    "name": "endDate",
+    "description": "Optional inclusive end date for city pages. Pagination stops after chronological listing sections pass this date.",
+    "required": false,
+    "default": "",
+    "type": "dateTime"
   },
   {
     "displayName": "Proxy Country",

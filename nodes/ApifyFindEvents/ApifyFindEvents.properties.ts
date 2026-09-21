@@ -10,10 +10,6 @@ export function buildActorInput(
 	itemIndex: number,
 	defaultInput: Record<string, any>,
 ): Record<string, any> {
-	const rawSelectedPlatforms = context.getNodeParameter('platforms', itemIndex, []);
-	const selectedPlatforms = Array.isArray(rawSelectedPlatforms)
-		? rawSelectedPlatforms.filter((value): value is string => typeof value === 'string' && value.length > 0)
-		: [];
 	return {
 		...defaultInput,
 		// Category (category)
@@ -27,7 +23,7 @@ export function buildActorInput(
 		// Get event details (getEventDetails)
 		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex, false),
 		// Platforms (platforms)
-		...(selectedPlatforms.length > 0 ? { platforms: selectedPlatforms } : {}),
+		platforms: context.getNodeParameter('platforms', itemIndex, []),
 		// Child run timeout (childRunTimeoutSecs)
 		childRunTimeoutSecs: context.getNodeParameter('childRunTimeoutSecs', itemIndex, 240),
 		// Debug mode (debugMode)
@@ -167,7 +163,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Platforms",
     "name": "platforms",
-    "description": "Optional source allowlist. Leave empty for Auto; select values only to restrict the search.",
+    "description": "Optional source allowlist. Leave empty for Auto, which considers every locally applicable source and orders them by local affinity. Choose values only to restrict the search.",
     "required": false,
     "default": [],
     "type": "multiOptions",

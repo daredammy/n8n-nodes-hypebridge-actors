@@ -43,6 +43,7 @@ const ACTORS = [
   { id: '8CFqYmM8J7RKqEu4s', name: 'runsignup-race-scraper' },
   { id: 'k5cyg7zhR5qwZOTbc', name: 'adaptive-web-scraper' },
   { id: '5aM34Os04KwJdeeGf', name: 'google-populartimes' },
+  { id: '2CKn7F7pA4eH2mVRm', name: 'temu-scraper' },
 ];
 
 const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors';

@@ -46,7 +46,7 @@ export function buildActorInput(
 		// Platform (platform)
 		...getOptionalParam(context, 'platform', itemIndex),
 		// Minimum Followers (minFollowers)
-		minFollowers: context.getNodeParameter('minFollowers', itemIndex, 50000),
+		minFollowers: context.getNodeParameter('minFollowers', itemIndex, 0),
 		// Location (location)
 		...getOptionalParam(context, 'location', itemIndex),
 		// Similar To — Instagram Seeds (seedHandlesInstagram)
@@ -152,7 +152,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "minFollowers",
     "description": "Minimum follower count (optional filter).",
     "required": false,
-    "default": 50000,
+    "default": 0,
     "type": "number",
     "typeOptions": {
       "minValue": 0,
@@ -164,7 +164,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "location",
     "description": "Preferred location (optional filter)",
     "required": false,
-    "default": "United States",
+    "default": "",
     "type": "string"
   },
   {
