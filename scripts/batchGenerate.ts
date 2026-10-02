@@ -44,6 +44,7 @@ const ACTORS = [
   { id: 'k5cyg7zhR5qwZOTbc', name: 'adaptive-web-scraper' },
   { id: '5aM34Os04KwJdeeGf', name: 'google-populartimes' },
   { id: '2CKn7F7pA4eH2mVRm', name: 'temu-scraper' },
+  { id: 'UsZRN7wfh1PBU4g0V', name: 'threads-scraper' },
 ];
 
 const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors';

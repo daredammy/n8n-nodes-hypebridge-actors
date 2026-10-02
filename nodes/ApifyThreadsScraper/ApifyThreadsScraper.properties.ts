@@ -32,12 +32,16 @@ export function buildActorInput(
 ): Record<string, any> {
 	return {
 		...defaultInput,
-		// Start URLs (startUrls)
+		// Threads post URLs (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
-		// Maximum Events (maxEvents)
-		maxEvents: context.getNodeParameter('maxEvents', itemIndex, 100),
-		// Scrape Full Event Details (scrapeEventDetails)
-		scrapeEventDetails: context.getNodeParameter('scrapeEventDetails', itemIndex, true),
+		// Max items per URL (maxItems)
+		maxItems: context.getNodeParameter('maxItems', itemIndex, 100),
+		// Max reply depth (maxReplyDepth)
+		maxReplyDepth: context.getNodeParameter('maxReplyDepth', itemIndex, 5),
+		// Max concurrency (maxConcurrency)
+		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex, 5),
+		// Debug mode (debugMode)
+		debugMode: context.getNodeParameter('debugMode', itemIndex, false),
 	};
 }
 
@@ -63,9 +67,9 @@ const authenticationProperties: INodeProperties[] = [
 
 export const actorProperties: INodeProperties[] = [
   {
-    "displayName": "Start URLs",
+    "displayName": "Threads post URLs",
     "name": "startUrls",
-    "description": "Posh.vip URLs to scrape: explore URLs (posh.vip/explore?location=Miami&when=This+Week), organizer pages (posh.vip/g/organizer-name), direct event URLs (posh.vip/e/event-name), or flyer shortlinks (posh.vip/f/...). For explore URLs, target a city rather than a state or region — Posh indexes events by city, so '?location=Washington' searches Washington DC. 'when' accepts Today, This+Week, or This+Month. Omitting 'location' defaults to New York City.",
+    "description": "Public Threads post links (threads.com or threads.net, including /t/ short links). Each URL returns the post and its reply tree.",
     "required": true,
     "default": {},
     "type": "fixedCollection",
@@ -88,23 +92,47 @@ export const actorProperties: INodeProperties[] = [
     ]
   },
   {
-    "displayName": "Maximum Events",
-    "name": "maxEvents",
-    "description": "Maximum number of event records to scrape per run.",
+    "displayName": "Max items per URL",
+    "name": "maxItems",
+    "description": "Maximum records returned per URL, counting the post itself. Replies are collected breadth-first, so a low limit returns top-level replies first.",
     "required": false,
     "default": 100,
     "type": "number",
     "typeOptions": {
       "minValue": 1,
-      "maxValue": 1000
+      "maxValue": 5000
     }
   },
   {
-    "displayName": "Scrape Full Event Details",
-    "name": "scrapeEventDetails",
-    "description": "When enabled, fetches complete event information including venue, lineup, and organizer details.",
+    "displayName": "Max reply depth",
+    "name": "maxReplyDepth",
+    "description": "How many levels of replies to follow. 0 returns only the post, 1 returns direct replies, 5 follows nested conversations five levels deep.",
     "required": false,
-    "default": true,
+    "default": 5,
+    "type": "number",
+    "typeOptions": {
+      "minValue": 0,
+      "maxValue": 10
+    }
+  },
+  {
+    "displayName": "Max concurrency",
+    "name": "maxConcurrency",
+    "description": "URLs processed in parallel. Keep low; Threads rate-limits aggressive clients.",
+    "required": false,
+    "default": 5,
+    "type": "number",
+    "typeOptions": {
+      "minValue": 1,
+      "maxValue": 10
+    }
+  },
+  {
+    "displayName": "Debug mode",
+    "name": "debugMode",
+    "description": "Save raw responses for failed requests to the key-value store (capped at 10 files).",
+    "required": false,
+    "default": false,
     "type": "boolean"
   }
 ];

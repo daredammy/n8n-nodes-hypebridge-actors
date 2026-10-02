@@ -128,9 +128,9 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Platform",
     "name": "platform",
-    "description": "Social media platform (optional filter)",
+    "description": "Optional hard platform filter. When omitted, the platform is inferred from the influencer description.",
     "required": false,
-    "default": "mixed",
+    "default": "",
     "type": "options",
     "options": [
       {

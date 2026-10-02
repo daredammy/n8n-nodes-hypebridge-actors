@@ -32,11 +32,6 @@ function getDateParam(context: IExecuteFunctions, paramName: string, itemIndex: 
 	return { [paramName]: date };
 }
 
-function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	const value = context.getNodeParameter(paramName, itemIndex, undefined);
-	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
-}
-
 export function buildActorInput(
 	context: IExecuteFunctions,
 	itemIndex: number,
@@ -47,15 +42,13 @@ export function buildActorInput(
 		// Any Shotgun URL (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
 		// Maximum Events (maxEvents)
-		maxEvents: context.getNodeParameter('maxEvents', itemIndex, 30),
+		maxEvents: context.getNodeParameter('maxEvents', itemIndex, 5),
 		// Scrape Full Event Details (scrapeEventDetails)
 		scrapeEventDetails: context.getNodeParameter('scrapeEventDetails', itemIndex, false),
 		// Start date (startDate)
 		...getDateParam(context, 'startDate', itemIndex),
 		// End date (endDate)
 		...getDateParam(context, 'endDate', itemIndex),
-		// Proxy Country (proxyCountryCode)
-		...getOptionalParam(context, 'proxyCountryCode', itemIndex),
 	};
 }
 
@@ -110,7 +103,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "maxEvents",
     "description": "Maximum number of events to scrape across all start URLs.",
     "required": false,
-    "default": 30,
+    "default": 5,
     "type": "number",
     "typeOptions": {
       "minValue": 1,
@@ -140,14 +133,6 @@ export const actorProperties: INodeProperties[] = [
     "required": false,
     "default": "",
     "type": "dateTime"
-  },
-  {
-    "displayName": "Proxy Country",
-    "name": "proxyCountryCode",
-    "description": "Two-letter country code for the residential proxy (e.g. US, FR, BR). Shotgun.live challenges a share of proxy IPs regardless of country; the scraper retries on fresh IPs automatically, so change this only if one country is consistently blocked for your target pages.",
-    "required": false,
-    "default": "US",
-    "type": "string"
   }
 ];
 

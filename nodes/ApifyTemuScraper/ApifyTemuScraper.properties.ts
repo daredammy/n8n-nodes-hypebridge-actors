@@ -37,7 +37,7 @@ export function buildActorInput(
 		// Max items (maxItems)
 		maxItems: context.getNodeParameter('maxItems', itemIndex, 40),
 		// Get product details (enrich from PDP) (getProductDetails)
-		getProductDetails: context.getNodeParameter('getProductDetails', itemIndex, false),
+		getProductDetails: context.getNodeParameter('getProductDetails', itemIndex, true),
 		// Extract customer reviews (PDP) (extractReviews)
 		extractReviews: context.getNodeParameter('extractReviews', itemIndex, false),
 	};
@@ -67,7 +67,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Start URLs",
     "name": "startUrls",
-    "description": "Temu URLs to scrape: Homepage, Product Detail pages, Category catalogs, Store pages, or Deals channels. Search result URLs are NOT supported and will be rejected - Temu serves search only from a prerender cache that cannot be warmed on demand.",
+    "description": "Temu product, category or homepage URLs. Keyword search URLs are not supported and will be rejected - browse by category instead. Store/merchant pages are not supported.",
     "required": false,
     "default": {},
     "type": "fixedCollection",
@@ -92,7 +92,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Max items",
     "name": "maxItems",
-    "description": "Maximum number of product items/records to extract across the run.",
+    "description": "Maximum number of product records to collect across the whole run.",
     "required": true,
     "default": 40,
     "type": "number",
@@ -104,15 +104,15 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Get product details (enrich from PDP)",
     "name": "getProductDetails",
-    "description": "When scraping search results, categories, or home feeds, automatically fetch each product's full PDP page for SKU variant matrix, high-resolution galleries, and specifications.",
+    "description": "Open each product's own page to add SKU options, specifications, the full image gallery, product video and return policy. On by default. Turn it off for a faster, cheaper run that returns listing fields only (title, price, discount, rating, review count, image).",
     "required": false,
-    "default": false,
+    "default": true,
     "type": "boolean"
   },
   {
     "displayName": "Extract customer reviews (PDP)",
     "name": "extractReviews",
-    "description": "When scraping Product Detail Pages (PDP), also extract top buyer reviews, star ratings, and buyer photos into the dataset.",
+    "description": "Include each product's recent review ratings and dates. Temu does not expose review text, author names or buyer photos, so those are not returned.",
     "required": false,
     "default": false,
     "type": "boolean"
