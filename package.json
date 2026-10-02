@@ -73,7 +73,8 @@
       "dist/nodes/ApifyAdaptiveWebScraper/ApifyAdaptiveWebScraper.node.js",
       "dist/nodes/ApifyGooglePopulartimes/ApifyGooglePopulartimes.node.js",
       "dist/nodes/ApifyTemuScraper/ApifyTemuScraper.node.js",
-      "dist/nodes/ApifyThreadsScraper/ApifyThreadsScraper.node.js"
+      "dist/nodes/ApifyThreadsScraper/ApifyThreadsScraper.node.js",
+      "dist/nodes/ApifyAmazonProductScraper/ApifyAmazonProductScraper.node.js"
     ]
   },
   "peerDependencies": {
