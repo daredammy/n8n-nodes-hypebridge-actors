@@ -18,8 +18,8 @@ export const ClassNameCamel = 'apifyThreadsScraper' as string;
 export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = 'UsZRN7wfh1PBU4g0V' as string;
 
-export const DISPLAY_NAME = 'Threads Scraper - Posts & Reply Trees' as string;
-export const DESCRIPTION = 'Run the Threads Scraper - Posts & Reply Trees Actor on Apify' as string;
+export const DISPLAY_NAME = 'Threads Reply Tree Scraper - Nested Comments & Replies' as string;
+export const DESCRIPTION = 'Run the Threads Reply Tree Scraper - Nested Comments & Replies Actor on Apify' as string;
 
 export class ApifyThreadsScraper implements INodeType {
 	description: INodeTypeDescription = {
