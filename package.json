@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-hypebridge-actors",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "description": "n8n community nodes for Hypebridge Apify actors - event scrapers, influencer tools, and more",
   "keywords": [
     "n8n-community-node-package",
