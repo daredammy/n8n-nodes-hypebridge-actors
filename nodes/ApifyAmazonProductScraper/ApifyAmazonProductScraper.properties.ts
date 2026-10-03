@@ -34,6 +34,8 @@ export function buildActorInput(
 		...defaultInput,
 		// Start URLs (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
+		// Marketplaces (marketplaces)
+		marketplaces: context.getNodeParameter('marketplaces', itemIndex, ["US"]),
 		// Max products (maxItems)
 		maxItems: context.getNodeParameter('maxItems', itemIndex, 50),
 		// Get full product details (getProductDetails)
@@ -48,6 +50,8 @@ export function buildActorInput(
 		includeSponsored: context.getNodeParameter('includeSponsored', itemIndex, true),
 		// Max concurrency (maxConcurrency)
 		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex, 2),
+		// Max page requests (maxRequests)
+		maxRequests: context.getNodeParameter('maxRequests', itemIndex, 250),
 		// Debug mode (debugMode)
 		debugMode: context.getNodeParameter('debugMode', itemIndex, false),
 	};
@@ -77,7 +81,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Start URLs",
     "name": "startUrls",
-    "description": "amazon.com search result URLs (for example https://www.amazon.com/s?k=mechanical+keyboard) or product URLs (for example https://www.amazon.com/dp/B09LK1P1RD). Other Amazon domains and unsupported page types are skipped with a warning.",
+    "description": "Amazon search or product URLs from any supported storefront (for example amazon.de/s?k=maus or amazon.co.jp/dp/4837979653). Each URL keeps its own country marketplace.",
     "required": false,
     "default": {},
     "type": "fixedCollection",
@@ -100,9 +104,113 @@ export const actorProperties: INodeProperties[] = [
     ]
   },
   {
+    "displayName": "Marketplaces",
+    "name": "marketplaces",
+    "description": "Select storefronts for Search keywords and ASINs. Start URLs always use their own storefront. Default is US for existing workflows. Choose all 23 for a global run.",
+    "required": false,
+    "default": [
+      "US"
+    ],
+    "type": "multiOptions",
+    "options": [
+      {
+        "name": "US",
+        "value": "US"
+      },
+      {
+        "name": "CA",
+        "value": "CA"
+      },
+      {
+        "name": "MX",
+        "value": "MX"
+      },
+      {
+        "name": "BR",
+        "value": "BR"
+      },
+      {
+        "name": "IE",
+        "value": "IE"
+      },
+      {
+        "name": "ES",
+        "value": "ES"
+      },
+      {
+        "name": "UK",
+        "value": "UK"
+      },
+      {
+        "name": "FR",
+        "value": "FR"
+      },
+      {
+        "name": "BE",
+        "value": "BE"
+      },
+      {
+        "name": "NL",
+        "value": "NL"
+      },
+      {
+        "name": "DE",
+        "value": "DE"
+      },
+      {
+        "name": "IT",
+        "value": "IT"
+      },
+      {
+        "name": "SE",
+        "value": "SE"
+      },
+      {
+        "name": "ZA",
+        "value": "ZA"
+      },
+      {
+        "name": "PL",
+        "value": "PL"
+      },
+      {
+        "name": "SA",
+        "value": "SA"
+      },
+      {
+        "name": "EG",
+        "value": "EG"
+      },
+      {
+        "name": "TR",
+        "value": "TR"
+      },
+      {
+        "name": "AE",
+        "value": "AE"
+      },
+      {
+        "name": "IN",
+        "value": "IN"
+      },
+      {
+        "name": "SG",
+        "value": "SG"
+      },
+      {
+        "name": "AU",
+        "value": "AU"
+      },
+      {
+        "name": "JP",
+        "value": "JP"
+      }
+    ]
+  },
+  {
     "displayName": "Max products",
     "name": "maxItems",
-    "description": "Maximum number of unique products (ASINs) to return across all inputs.",
+    "description": "Maximum number of unique marketplace and ASIN pairs across the whole run. A multi-market search may reach this cap before every market returns a product; increase the cap to cover more markets.",
     "required": false,
     "default": 50,
     "type": "number",
@@ -122,7 +230,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Search keywords",
     "name": "searchQueries",
-    "description": "Keywords to search on amazon.com. Each becomes a search results URL. Up to 20.",
+    "description": "Keywords to search in every selected marketplace. Up to 20 per run.",
     "required": false,
     "default": {},
     "type": "fixedCollection",
@@ -147,7 +255,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "ASINs",
     "name": "asins",
-    "description": "10-character Amazon product IDs (ASINs, including 10-digit ISBNs for books). Always returns full details. Duplicates are removed.",
+    "description": "10-character product IDs, including book ISBN-10 values. Each ASIN is opened in every selected marketplace; duplicates are removed by marketplace and ASIN.",
     "required": false,
     "default": {},
     "type": "fixedCollection",
@@ -199,6 +307,18 @@ export const actorProperties: INodeProperties[] = [
     "typeOptions": {
       "minValue": 1,
       "maxValue": 10
+    }
+  },
+  {
+    "displayName": "Max page requests",
+    "name": "maxRequests",
+    "description": "Hard cap on page requests across all selected marketplaces, including pagination and product details.",
+    "required": false,
+    "default": 250,
+    "type": "number",
+    "typeOptions": {
+      "minValue": 1,
+      "maxValue": 1000
     }
   },
   {

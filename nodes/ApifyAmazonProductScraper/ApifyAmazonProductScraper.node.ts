@@ -18,8 +18,8 @@ export const ClassNameCamel = 'apifyAmazonProductScraper' as string;
 export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = 'gNVwLwz9LnoSxhtMf' as string;
 
-export const DISPLAY_NAME = 'Amazon Product Scraper - US Search and Product Details' as string;
-export const DESCRIPTION = 'Run the Amazon Product Scraper - US Search and Product Details Actor on Apify' as string;
+export const DISPLAY_NAME = 'Amazon Product Scraper - Global Search and Product Details' as string;
+export const DESCRIPTION = 'Scrape Amazon search results and product pages across 23 country storefronts.' as string;
 
 export class ApifyAmazonProductScraper implements INodeType {
 	description: INodeTypeDescription = {
