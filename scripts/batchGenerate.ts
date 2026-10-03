@@ -46,6 +46,7 @@ const ACTORS = [
   { id: '2CKn7F7pA4eH2mVRm', name: 'temu-scraper' },
   { id: 'UsZRN7wfh1PBU4g0V', name: 'threads-scraper' },
   { id: 'gNVwLwz9LnoSxhtMf', name: 'amazon-product-scraper' },
+  { id: 'kRmuS1b15fk0FDVkV', name: 'hypebridge-pricing' },
 ];
 
 const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors';
