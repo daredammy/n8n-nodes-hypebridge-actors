@@ -210,7 +210,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Max products",
     "name": "maxItems",
-    "description": "Maximum number of unique marketplace and ASIN pairs across the whole run. A multi-market search may reach this cap before every market returns a product; increase the cap to cover more markets.",
+    "description": "Maximum unique marketplace and ASIN pairs across the run. Search-only multi-market runs share this cap across storefronts; set it at least as high as the market count.",
     "required": false,
     "default": 50,
     "type": "number",
