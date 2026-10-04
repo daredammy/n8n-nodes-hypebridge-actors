@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifyXceedEventsScraper",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/xceed-events-scraper"
+      }
+    ]
+  },
+  "alias": [
+    "xceed events scraper",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}

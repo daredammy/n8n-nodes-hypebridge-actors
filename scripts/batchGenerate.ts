@@ -48,6 +48,7 @@ const ACTORS = [
   { id: 'gNVwLwz9LnoSxhtMf', name: 'amazon-product-scraper' },
   { id: 'kRmuS1b15fk0FDVkV', name: 'hypebridge-pricing' },
   { id: 'eRjCxXUYtt92qu2N8', name: 'resident-advisor-scraper' },
+  { id: 'CmrJzJZBXNVU5s3Q8', name: 'xceed-events-scraper' },
 ];
 
 const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors';
