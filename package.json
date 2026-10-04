@@ -75,7 +75,8 @@
       "dist/nodes/ApifyTemuScraper/ApifyTemuScraper.node.js",
       "dist/nodes/ApifyThreadsScraper/ApifyThreadsScraper.node.js",
       "dist/nodes/ApifyAmazonProductScraper/ApifyAmazonProductScraper.node.js",
-      "dist/nodes/ApifyHypebridgePricing/ApifyHypebridgePricing.node.js"
+      "dist/nodes/ApifyHypebridgePricing/ApifyHypebridgePricing.node.js",
+      "dist/nodes/ApifyResidentAdvisorScraper/ApifyResidentAdvisorScraper.node.js"
     ]
   },
   "peerDependencies": {
