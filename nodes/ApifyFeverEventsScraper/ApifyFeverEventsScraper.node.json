@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifyFeverEventsScraper",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/fever-events-scraper"
+      }
+    ]
+  },
+  "alias": [
+    "fever events scraper",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}
