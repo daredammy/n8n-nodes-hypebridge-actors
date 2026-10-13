@@ -19,7 +19,7 @@ export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = 'eRjCxXUYtt92qu2N8' as string;
 
 export const DISPLAY_NAME = 'Resident Advisor (RA) Events & Music Data Scraper' as string;
-export const DESCRIPTION = 'Run the Resident Advisor (RA) Events & Music Data Scraper Actor on Apify' as string;
+export const DESCRIPTION = 'Extracts events from Resident Advisor (ra.co) by city, plus the venues, promoters, artists and labels behind them and RA\'s news, reviews, features and podcasts. Paste an RA URL, set a result cap and download clean, structured data without an official API.' as string;
 
 export class ApifyResidentAdvisorScraper implements INodeType {
 	description: INodeTypeDescription = {

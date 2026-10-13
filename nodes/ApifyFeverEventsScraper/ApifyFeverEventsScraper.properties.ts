@@ -37,7 +37,7 @@ export function buildActorInput(
 		// Max events (maxEvents)
 		maxEvents: context.getNodeParameter('maxEvents', itemIndex, 100),
 		// Get event details (getEventDetails)
-		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex, false),
+		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex, true),
 		// Include ticket tiers and session availability (includeTicketTiers)
 		includeTicketTiers: context.getNodeParameter('includeTicketTiers', itemIndex, false),
 		// Session window (days) (sessionWindowDays)
@@ -128,7 +128,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "getEventDetails",
     "description": "Visit each event's detail API for the full description, venue address and coordinates, photos, categories and default ticket. Off returns the listing fields only (cheaper and faster).",
     "required": false,
-    "default": false,
+    "default": true,
     "type": "boolean"
   },
   {

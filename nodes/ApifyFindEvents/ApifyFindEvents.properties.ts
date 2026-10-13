@@ -219,6 +219,18 @@ export const actorProperties: INodeProperties[] = [
       {
         "name": "Eventeny",
         "value": "eventeny"
+      },
+      {
+        "name": "Resident Advisor",
+        "value": "ra"
+      },
+      {
+        "name": "Xceed",
+        "value": "xceed"
+      },
+      {
+        "name": "Fever",
+        "value": "fever"
       }
     ]
   },

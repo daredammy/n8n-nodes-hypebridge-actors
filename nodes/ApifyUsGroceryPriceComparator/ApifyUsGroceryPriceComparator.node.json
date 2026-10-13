@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifyUsGroceryPriceComparator",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/us-grocery-price-comparator"
+      }
+    ]
+  },
+  "alias": [
+    "us grocery price comparator",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}

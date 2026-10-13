@@ -38,6 +38,7 @@ Then restart n8n.
 |------|-------------|-------------|
 | **Find Events** | Find and normalize local events across all applicable sources | [hypebridge/find-events](https://apify.com/hypebridge/find-events) |
 | **Eventbrite Search** | Scrape Eventbrite search, discovery, and event detail pages | [hypebridge/eventbrite-search](https://apify.com/hypebridge/eventbrite-search) |
+| **Luma** | Collect events, calendars, host profiles, and optional event details | [hypebridge/luma-com-event-scraper](https://apify.com/hypebridge/luma-com-event-scraper) |
 | **Dice.fm** | Scrape concerts, festivals, DJ events, and live shows | [hypebridge/dice-fm](https://apify.com/hypebridge/dice-fm) |
 | **Shotgun Live** | Scrape electronic music, nightlife, and party events worldwide | [hypebridge/shotgun-live](https://apify.com/hypebridge/shotgun-live) |
 | **Posh VIP** | Scrape nightlife, concerts, and party events | [hypebridge/posh-vip](https://apify.com/hypebridge/posh-vip) |
@@ -50,6 +51,14 @@ Then restart n8n.
 |------|-------------|-------------|
 | **Influencer Discovery** | Discover and rank influencers on Instagram + TikTok based on brand fit | [hypebridge/influencer-discovery-agent-instagram-tiktok](https://apify.com/hypebridge/influencer-discovery-agent-instagram-tiktok) |
 | **Influencer Evaluation** | Deep evaluation of influencer profiles with audience insights | [hypebridge/influencer-evaluation-agent-instagram-tiktok](https://apify.com/hypebridge/influencer-evaluation-agent-instagram-tiktok) |
+
+### Product Data
+
+| Node | Description | Apify Actor |
+|------|-------------|-------------|
+| **Temu** | Collect product, category, and home-feed data, with optional product-page enrichment | [hypebridge/temu-scraper](https://apify.com/hypebridge/temu-scraper) |
+
+Temu accepts product, category, and homepage URLs. Keyword search and merchant pages are not supported. Optional reviews contain ratings and dates; written review text is unavailable.
 
 ### Other Scrapers
 
@@ -99,6 +108,16 @@ Schedule Trigger → Eventbrite Search → Filter → Google Sheets
 ```
 
 Automatically collect new events daily and save to a spreadsheet.
+
+### Example: Temu Product Catalog
+
+```
+Manual Trigger → Temu → Google Sheets
+```
+
+Start with one supported product or category URL and set **Max items** to `10`. Keep **Get product details** enabled when you need SKU options, specifications, images, or video; disable it for listing fields only. Leave **Extract customer reviews** off unless you need review ratings and dates.
+
+Run manually to check the returned fields before adding a schedule. Apify Actor runs are billed to your account under the Actor's current pricing. A scheduled workflow should cap the number of URLs and items per run and use an appropriate spending limit; **Max items** is a record limit, not a dollar limit.
 
 ## Compatibility
 

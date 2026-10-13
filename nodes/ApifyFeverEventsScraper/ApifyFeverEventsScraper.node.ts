@@ -19,7 +19,7 @@ export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = 'm4VEznf54AHIXHHQR' as string;
 
 export const DISPLAY_NAME = 'Fever Events Scraper — Tickets, Sessions & Reviews' as string;
-export const DESCRIPTION = 'Run the Fever Events Scraper — Tickets, Sessions & Reviews Actor on Apify' as string;
+export const DESCRIPTION = 'Extracts events and experiences from Fever: candlelight concerts, immersive exhibitions, theatre, food and drink experiences, nightlife and attractions. For every event you get the title, venue, prices, ratings, session dates, ticket tiers with availability, photos and, optionally, text reviews' as string;
 
 export class ApifyFeverEventsScraper implements INodeType {
 	description: INodeTypeDescription = {

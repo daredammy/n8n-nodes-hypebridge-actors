@@ -44,7 +44,7 @@ export function buildActorInput(
 		// Maximum records (maxItems)
 		maxItems: context.getNodeParameter('maxItems', itemIndex, 100),
 		// Get full event details (getEventDetails)
-		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex, false),
+		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex, true),
 		// From date (dateFrom)
 		...getDateParam(context, 'dateFrom', itemIndex),
 		// To date (dateTo)
@@ -123,7 +123,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "getEventDetails",
     "description": "Fetch each listed event individually to add the description, raw lineup, venue capacity and coordinates, status and update timestamps. Direct event URLs always return full detail.",
     "required": false,
-    "default": false,
+    "default": true,
     "type": "boolean"
   },
   {

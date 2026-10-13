@@ -19,7 +19,7 @@ export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = 'CmrJzJZBXNVU5s3Q8' as string;
 
 export const DISPLAY_NAME = 'Xceed Events Scraper' as string;
-export const DESCRIPTION = 'Run the Xceed Events Scraper Actor on Apify' as string;
+export const DESCRIPTION = 'Extracts nightlife, club and festival events from Xceed without needing an official API. For every event you can get the date and venue, age policy, line-up, and the full list of ticket tiers with prices, currency, fees and availability. It can also extract venue and artist profiles.' as string;
 
 export class ApifyXceedEventsScraper implements INodeType {
 	description: INodeTypeDescription = {

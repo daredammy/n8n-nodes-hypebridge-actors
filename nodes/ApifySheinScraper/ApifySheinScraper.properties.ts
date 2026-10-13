@@ -46,6 +46,8 @@ export function buildActorInput(
 		...defaultInput,
 		// URLs (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
+		// Search queries (searchQueries)
+		...getFixedCollectionParam(context, 'searchQueries', itemIndex, 'values', 'mapValues'),
 		// Max items (maxItems)
 		maxItems: context.getNodeParameter('maxItems', itemIndex, 500),
 		// Max pages per URL (maxPagesPerStartUrl)
@@ -102,6 +104,31 @@ export const actorProperties: INodeProperties[] = [
           {
             "displayName": "item",
             "name": "url",
+            "type": "string",
+            "default": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "displayName": "Search queries",
+    "name": "searchQueries",
+    "description": "Search terms or keywords to query on SHEIN (e.g. 'dress', 'crossbody bag', or SKU numbers). Each query will be searched on us.shein.com.",
+    "required": false,
+    "default": {},
+    "type": "fixedCollection",
+    "typeOptions": {
+      "multipleValues": true
+    },
+    "options": [
+      {
+        "name": "values",
+        "displayName": "Values",
+        "values": [
+          {
+            "displayName": "Value",
+            "name": "value",
             "type": "string",
             "default": ""
           }

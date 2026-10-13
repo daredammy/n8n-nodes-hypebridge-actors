@@ -42,7 +42,7 @@ export function buildActorInput(
 		// Max events (maxEvents)
 		maxEvents: context.getNodeParameter('maxEvents', itemIndex, 100),
 		// Get event details and ticket offers (getEventDetails)
-		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex, false),
+		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex, true),
 		// Country (homepage URL only) (country)
 		...getOptionalParam(context, 'country', itemIndex),
 		// Max concurrency (maxConcurrency)
@@ -115,7 +115,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "getEventDetails",
     "description": "Visit each event page for the full description, line-up, ticket tiers, prices, fees and availability. Off returns basic listing fields only. Event URLs you paste directly always return full details.",
     "required": false,
-    "default": false,
+    "default": true,
     "type": "boolean"
   },
   {

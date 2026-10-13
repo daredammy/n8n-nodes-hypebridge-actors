@@ -19,7 +19,7 @@ export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = 'UsZRN7wfh1PBU4g0V' as string;
 
 export const DISPLAY_NAME = 'Threads Reply Tree Scraper - Nested Comments & Replies' as string;
-export const DESCRIPTION = 'Run the Threads Reply Tree Scraper - Nested Comments & Replies Actor on Apify' as string;
+export const DESCRIPTION = 'Scrape Threads posts with their full nested reply trees, the author\'s own follow-up posts, and recent posts from profiles. Plain HTTP, no login.' as string;
 
 export class ApifyThreadsScraper implements INodeType {
 	description: INodeTypeDescription = {
