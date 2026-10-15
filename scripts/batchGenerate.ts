@@ -713,13 +713,16 @@ async function main() {
     fs.rmSync(obsoleteDir, { recursive: true });
   }
 
+  const filter = process.argv[2];
+  const targetActors = filter ? ACTORS.filter(a => a.name.includes(filter)) : ACTORS;
+
   const client = new ApifyClient({
     token: process.env.APIFY_TOKEN,
   });
 
   const classNames: string[] = [];
 
-  for (const actor of ACTORS) {
+  for (const actor of targetActors) {
     try {
       const className = await generateNode(client, actor.id, actor.name);
       classNames.push(className);
@@ -728,7 +731,11 @@ async function main() {
     }
   }
 
-  await updatePackageJson(classNames);
+  if (!filter) {
+    await updatePackageJson(classNames);
+  } else {
+    console.log(chalk.green(`\n✅ Generated target actor(s): ${classNames.join(', ')} (package.json nodes list preserved)`));
+  }
 
   console.log(chalk.bold.green('\n🎉 Batch generation complete!'));
   console.log(chalk.cyan(`\nGenerated ${classNames.length} nodes:`));

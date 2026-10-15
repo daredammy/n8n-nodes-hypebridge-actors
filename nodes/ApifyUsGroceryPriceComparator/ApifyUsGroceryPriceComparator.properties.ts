@@ -40,11 +40,19 @@ export function buildActorInput(
 		// Grocery items (queries)
 		...getFixedCollectionParam(context, 'queries', itemIndex, 'values', 'mapValues'),
 		// Stores (stores)
-		stores: context.getNodeParameter('stores', itemIndex, ["walmart","target"]),
+		stores: context.getNodeParameter('stores', itemIndex, ["walmart","target","kroger","fred_meyer"]),
 		// Candidates per store (candidatesPerStore)
 		candidatesPerStore: context.getNodeParameter('candidatesPerStore', itemIndex, 8),
 		// Matching mode (matchMode)
 		...getOptionalParam(context, 'matchMode', itemIndex),
+		// Kroger ZIP Code (krogerZipCode)
+		...getOptionalParam(context, 'krogerZipCode', itemIndex),
+		// Fred Meyer ZIP Code (fredMeyerZipCode)
+		...getOptionalParam(context, 'fredMeyerZipCode', itemIndex),
+		// Kroger Developer Client ID (krogerClientId)
+		...getOptionalParam(context, 'krogerClientId', itemIndex),
+		// Kroger Developer Client Secret (krogerClientSecret)
+		...getOptionalParam(context, 'krogerClientSecret', itemIndex),
 		// Max child actor spend (USD) (maxChildSpendUsd)
 		maxChildSpendUsd: context.getNodeParameter('maxChildSpendUsd', itemIndex, 1),
 	};
@@ -74,7 +82,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Grocery items",
     "name": "queries",
-    "description": "Grocery staples to compare across Walmart and Target (e.g., 'whole milk 1 gallon', 'large white eggs 12 ct'). Max 20 items per run.",
+    "description": "Grocery staples to compare across supermarkets (e.g., 'whole milk 1 gallon', 'large white eggs 12 ct'). Max 20 items per run.",
     "required": true,
     "default": {},
     "type": "fixedCollection",
@@ -99,21 +107,31 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Stores",
     "name": "stores",
-    "description": "Stores to compare. Prices represent national online listing prices.",
+    "description": "Supermarket chains to compare. Walmart & Target use national online pricing; Kroger & Fred Meyer use store-specific regional pricing.",
     "required": false,
     "default": [
       "walmart",
-      "target"
+      "target",
+      "kroger",
+      "fred_meyer"
     ],
     "type": "multiOptions",
     "options": [
       {
-        "name": "walmart",
+        "name": "Walmart",
         "value": "walmart"
       },
       {
-        "name": "target",
+        "name": "Target",
         "value": "target"
+      },
+      {
+        "name": "Kroger",
+        "value": "kroger"
+      },
+      {
+        "name": "Fred Meyer",
+        "value": "fred_meyer"
       }
     ]
   },
@@ -132,20 +150,56 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Matching mode",
     "name": "matchMode",
-    "description": "Choose whether to allow equivalent store private labels (Great Value ≈ Good & Gather) or strictly compare exact national brands.",
+    "description": "Choose matching strategy: all available tiers (store brand + national brand + organic), equivalent store private labels only, or exact national brands only.",
     "required": false,
-    "default": "private_label_equivalent",
+    "default": "all_tiers",
     "type": "options",
     "options": [
       {
-        "name": "Equivalent store brands allowed",
+        "name": "All matching tiers (Store Brand, National Brand, Organic)",
+        "value": "all_tiers"
+      },
+      {
+        "name": "Store brand equivalent only (Great Value ≈ Good & Gather ≈ Kroger / Private Selection)",
         "value": "private_label_equivalent"
       },
       {
-        "name": "Exact brand only",
+        "name": "Exact national brand only",
         "value": "exact_brand_only"
       }
     ]
+  },
+  {
+    "displayName": "Kroger ZIP Code",
+    "name": "krogerZipCode",
+    "description": "ZIP code used to resolve local Kroger store pricing and inventory. Default: 45202 (Cincinnati, OH).",
+    "required": false,
+    "default": "45202",
+    "type": "string"
+  },
+  {
+    "displayName": "Fred Meyer ZIP Code",
+    "name": "fredMeyerZipCode",
+    "description": "ZIP code used to resolve local Fred Meyer store pricing and inventory. Default: 97201 (Portland, OR).",
+    "required": false,
+    "default": "97201",
+    "type": "string"
+  },
+  {
+    "displayName": "Kroger Developer Client ID",
+    "name": "krogerClientId",
+    "description": "Optional custom Kroger OAuth2 client_id from developer.kroger.com. Falls back to default environment credentials.",
+    "required": false,
+    "default": "",
+    "type": "string"
+  },
+  {
+    "displayName": "Kroger Developer Client Secret",
+    "name": "krogerClientSecret",
+    "description": "Optional custom Kroger OAuth2 client_secret from developer.kroger.com.",
+    "required": false,
+    "default": "",
+    "type": "string"
   },
   {
     "displayName": "Max child actor spend (USD)",
