@@ -39,6 +39,8 @@ export function buildActorInput(
 		...defaultInput,
 		// Grocery items (queries)
 		...getFixedCollectionParam(context, 'queries', itemIndex, 'values', 'mapValues'),
+		// Preset Staple Basket (presetBasket)
+		...getOptionalParam(context, 'presetBasket', itemIndex),
 		// Stores (stores)
 		stores: context.getNodeParameter('stores', itemIndex, ["walmart","target","kroger","fred_meyer"]),
 		// Candidates per store (candidatesPerStore)
@@ -82,8 +84,8 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Grocery items",
     "name": "queries",
-    "description": "Grocery staples to compare across supermarkets (e.g., 'whole milk 1 gallon', 'large white eggs 12 ct'). Max 20 items per run.",
-    "required": true,
+    "description": "Grocery staples to compare across supermarkets (e.g., 'whole milk 1 gallon', 'large white eggs 12 ct'). Max 50 items per run. Can be combined with or replaced by a Preset Staple Basket.",
+    "required": false,
     "default": {},
     "type": "fixedCollection",
     "typeOptions": {
@@ -105,9 +107,39 @@ export const actorProperties: INodeProperties[] = [
     ]
   },
   {
+    "displayName": "Preset Staple Basket",
+    "name": "presetBasket",
+    "description": "Optional pre-configured grocery basket for instant benchmarking or CPI/inflation tracking. Merged with any custom Grocery items above (up to 50 total).",
+    "required": false,
+    "default": "none",
+    "type": "options",
+    "options": [
+      {
+        "name": "None (Use custom Grocery items only)",
+        "value": "none"
+      },
+      {
+        "name": "USDA Thrifty Food Plan Staples (15 items)",
+        "value": "usda_thrifty_15"
+      },
+      {
+        "name": "BLS / CPI Core Food-at-Home Basket (25 items)",
+        "value": "cpi_core_25"
+      },
+      {
+        "name": "Low-Carb / Keto Household Staples (10 items)",
+        "value": "keto_10"
+      },
+      {
+        "name": "Baking Essentials Basket (8 items)",
+        "value": "baking_essentials_8"
+      }
+    ]
+  },
+  {
     "displayName": "Stores",
     "name": "stores",
-    "description": "Supermarket chains to compare. Walmart & Target use national online pricing; Kroger & Fred Meyer use store-specific regional pricing.",
+    "description": "Supermarket chains to compare (11 supported banners). Walmart & Target use national online pricing; Kroger & its 8 regional banners use store-specific pricing at $0 child scraper cost.",
     "required": false,
     "default": [
       "walmart",
@@ -126,12 +158,40 @@ export const actorProperties: INodeProperties[] = [
         "value": "target"
       },
       {
-        "name": "Kroger",
+        "name": "Kroger (Midwest / South)",
         "value": "kroger"
       },
       {
-        "name": "Fred Meyer",
+        "name": "Fred Meyer (Pacific Northwest)",
         "value": "fred_meyer"
+      },
+      {
+        "name": "Ralphs (Southern California)",
+        "value": "ralphs"
+      },
+      {
+        "name": "Harris Teeter (Mid-Atlantic / Carolinas)",
+        "value": "harris_teeter"
+      },
+      {
+        "name": "King Soopers (Colorado / Rocky Mountains)",
+        "value": "king_soopers"
+      },
+      {
+        "name": "Fry's Food Stores (Arizona)",
+        "value": "frys"
+      },
+      {
+        "name": "Mariano's (Chicagoland)",
+        "value": "marianos"
+      },
+      {
+        "name": "Smith's Food & Drug (Mountain West / Nevada / Utah)",
+        "value": "smiths"
+      },
+      {
+        "name": "QFC - Quality Food Centers (Seattle / Puget Sound)",
+        "value": "qfc"
       }
     ]
   },
@@ -160,7 +220,7 @@ export const actorProperties: INodeProperties[] = [
         "value": "all_tiers"
       },
       {
-        "name": "Store brand equivalent only (Great Value ≈ Good & Gather ≈ Kroger / Private Selection)",
+        "name": "Store brand equivalent only (Great Value ≈ Good & Gather ≈ Kroger / Simple Truth)",
         "value": "private_label_equivalent"
       },
       {
