@@ -42,21 +42,19 @@ export function buildActorInput(
 		// Preset Staple Basket (presetBasket)
 		...getOptionalParam(context, 'presetBasket', itemIndex),
 		// Stores (stores)
-		stores: context.getNodeParameter('stores', itemIndex, ["walmart","target","kroger","fred_meyer"]),
+		stores: context.getNodeParameter('stores', itemIndex, ["walmart","target","kroger"]),
+		// ZIP code (local prices) (zipCode)
+		...getOptionalParam(context, 'zipCode', itemIndex),
 		// Candidates per store (candidatesPerStore)
 		candidatesPerStore: context.getNodeParameter('candidatesPerStore', itemIndex, 8),
 		// Matching mode (matchMode)
 		...getOptionalParam(context, 'matchMode', itemIndex),
-		// Kroger ZIP Code (krogerZipCode)
-		...getOptionalParam(context, 'krogerZipCode', itemIndex),
-		// Fred Meyer ZIP Code (fredMeyerZipCode)
-		...getOptionalParam(context, 'fredMeyerZipCode', itemIndex),
 		// Kroger Developer Client ID (krogerClientId)
 		...getOptionalParam(context, 'krogerClientId', itemIndex),
 		// Kroger Developer Client Secret (krogerClientSecret)
 		...getOptionalParam(context, 'krogerClientSecret', itemIndex),
 		// Max child actor spend (USD) (maxChildSpendUsd)
-		maxChildSpendUsd: context.getNodeParameter('maxChildSpendUsd', itemIndex, 1),
+		maxChildSpendUsd: context.getNodeParameter('maxChildSpendUsd', itemIndex, 5),
 	};
 }
 
@@ -139,13 +137,12 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Stores",
     "name": "stores",
-    "description": "Supermarket chains to compare (11 supported banners). Walmart & Target use national online pricing; Kroger & its 8 regional banners use store-specific pricing at $0 child scraper cost.",
+    "description": "Supermarket chains to compare (11 supported banners). Every store is priced at the nearest store to your ZIP code. A banner with no store within ~25 miles of the ZIP is skipped (null in storeLocations) rather than priced from another region.",
     "required": false,
     "default": [
       "walmart",
       "target",
-      "kroger",
-      "fred_meyer"
+      "kroger"
     ],
     "type": "multiOptions",
     "options": [
@@ -196,6 +193,14 @@ export const actorProperties: INodeProperties[] = [
     ]
   },
   {
+    "displayName": "ZIP code (local prices)",
+    "name": "zipCode",
+    "description": "5-digit US ZIP code. Walmart, Target and every Kroger banner are priced at the nearest store to this ZIP, so all prices come from the same neighbourhood. Kroger banners only exist in some regions (e.g. Fred Meyer in the Pacific Northwest); one with no store near the ZIP is skipped. Default: 45202 (Cincinnati, OH), where Walmart, Target and Kroger all have stores.",
+    "required": false,
+    "default": "45202",
+    "type": "string"
+  },
+  {
     "displayName": "Candidates per store",
     "name": "candidatesPerStore",
     "description": "Number of search results inspected per store. Higher numbers improve store-brand matching accuracy.",
@@ -230,22 +235,6 @@ export const actorProperties: INodeProperties[] = [
     ]
   },
   {
-    "displayName": "Kroger ZIP Code",
-    "name": "krogerZipCode",
-    "description": "ZIP code used to resolve local Kroger store pricing and inventory. Default: 45202 (Cincinnati, OH).",
-    "required": false,
-    "default": "45202",
-    "type": "string"
-  },
-  {
-    "displayName": "Fred Meyer ZIP Code",
-    "name": "fredMeyerZipCode",
-    "description": "ZIP code used to resolve local Fred Meyer store pricing and inventory. Default: 97201 (Portland, OR).",
-    "required": false,
-    "default": "97201",
-    "type": "string"
-  },
-  {
     "displayName": "Kroger Developer Client ID",
     "name": "krogerClientId",
     "description": "Optional custom Kroger OAuth2 client_id from developer.kroger.com. Falls back to default environment credentials.",
@@ -264,13 +253,13 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Max child actor spend (USD)",
     "name": "maxChildSpendUsd",
-    "description": "Hard budget cap on pass-through child scraper execution charges for this run.",
+    "description": "Hard budget cap on pass-through Walmart/Target scraper charges for this run (about $0.10 per Walmart query and $0.07 per Target query at 8 candidates, free-tier rates). Queries beyond the cap are skipped. Kroger banners cost $0.",
     "required": false,
-    "default": 1,
+    "default": 5,
     "type": "number",
     "typeOptions": {
       "minValue": 0.1,
-      "maxValue": 10
+      "maxValue": 20
     }
   }
 ];
