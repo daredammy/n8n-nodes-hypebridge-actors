@@ -117,7 +117,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Get full job details",
     "name": "getJobDetails",
-    "description": "Fetch each job's full description and applicant insights (applicant count, % with resume and cover letter). One extra request per job and a higher per-job price. Job URLs always include details.",
+    "description": "Fetch full descriptions, applicant insights, company website/industry/employee band, source expiry and update dates, advertiser verification and public email contacts. Company fields depend on available profiles. One detail request per job; direct job URLs always include details.",
     "required": false,
     "default": false,
     "type": "boolean"
