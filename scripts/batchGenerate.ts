@@ -11,6 +11,7 @@ import type { INodeProperties } from 'n8n-workflow';
 import chalk from 'chalk';
 
 const ACTORS = [
+  { id: 'R64PYvu1zKMHv2l6g', name: 'seek-jobstreet-jobsdb-scraper' },
   { id: 'XIUAyRsGZ5I3g1kxi', name: 'find-events' },
   { id: 'RjlsknvHDKDBbrNVX', name: 'eventbrite-search' },
   { id: '9H947AEOMEGDjwWQF', name: 'draftkings-predictions' },

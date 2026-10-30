@@ -78,7 +78,8 @@
       "dist/nodes/ApifyResidentAdvisorScraper/ApifyResidentAdvisorScraper.node.js",
       "dist/nodes/ApifyXceedEventsScraper/ApifyXceedEventsScraper.node.js",
       "dist/nodes/ApifyFeverEventsScraper/ApifyFeverEventsScraper.node.js",
-      "dist/nodes/ApifyUsGroceryPriceComparator/ApifyUsGroceryPriceComparator.node.js"
+      "dist/nodes/ApifyUsGroceryPriceComparator/ApifyUsGroceryPriceComparator.node.js",
+      "dist/nodes/ApifySeekJobstreetJobsdbScraper/ApifySeekJobstreetJobsdbScraper.node.js"
     ]
   },
   "peerDependencies": {
