@@ -25,6 +25,18 @@ function getFixedCollectionParam(
 	return { [paramName]: result };
 }
 
+function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
+	try {
+		const rawValue = context.getNodeParameter(paramName, itemIndex, undefined);
+		if (rawValue === undefined || rawValue === null || rawValue === '' || (typeof rawValue === 'string' && rawValue.trim() === '')) {
+			return {};
+		}
+		return { [paramName]: typeof rawValue === 'string' ? JSON.parse(rawValue) : rawValue };
+	} catch (error) {
+		throw new Error(`Invalid JSON in parameter "${paramName}": ${(error as Error).message}`);
+	}
+}
+
 function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
 	const value = context.getNodeParameter(paramName, itemIndex, undefined);
 	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
@@ -38,7 +50,7 @@ export function buildActorInput(
 	return {
 		...defaultInput,
 		// Spotify URLs (startUrls)
-		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
+		...getJsonParam(context, 'startUrls', itemIndex),
 		// Max items (maxItems)
 		maxItems: context.getNodeParameter('maxItems', itemIndex, 1000),
 		// Include 30-second preview MP3 URLs (includePreviewUrls)
@@ -88,27 +100,10 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Spotify URLs",
     "name": "startUrls",
-    "description": "Track, album, artist or playlist URLs (open.spotify.com/... or spotify:track:... URIs). Search URLs (open.spotify.com/search/...) also work.",
+    "description": "Array of Spotify URLs or spotify:track/album/artist/playlist URIs. Entries may be strings or objects with a url property.",
     "required": false,
-    "default": {},
-    "type": "fixedCollection",
-    "typeOptions": {
-      "multipleValues": true
-    },
-    "options": [
-      {
-        "name": "items",
-        "displayName": "items",
-        "values": [
-          {
-            "displayName": "item",
-            "name": "url",
-            "type": "string",
-            "default": ""
-          }
-        ]
-      }
-    ]
+    "default": "[]",
+    "type": "json"
   },
   {
     "displayName": "Max items",
