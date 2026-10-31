@@ -44,7 +44,9 @@ export function convertApifyToN8n(apifySchema: ApifyInputSchema): INodePropertie
     const requiredFields = apifySchema.required || [];
 
     for (const [key, field] of Object.entries(apifySchema.properties || {})) {
-        const typeProps = getPropsForTypeN8n(field);
+        const typeProps = field.type === 'boolean' && field.default === undefined && field.prefill === undefined && !requiredFields.includes(key)
+            ? { type: 'options' as const, default: '', options: [{name: 'Automatic', value: ''}, {name: 'Yes', value: true}, {name: 'No', value: false}] }
+            : getPropsForTypeN8n(field);
 
         const n8nField: INodeProperties = {
             displayName: field.title || key,

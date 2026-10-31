@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifySpotifyPlayCountCuratorScraper",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/spotify-play-count-curator-scraper"
+      }
+    ]
+  },
+  "alias": [
+    "spotify play count curator scraper",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}
