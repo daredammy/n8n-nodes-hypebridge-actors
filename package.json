@@ -1,11 +1,21 @@
 {
   "name": "n8n-nodes-hypebridge-actors",
-  "version": "2.20.0",
-  "description": "n8n community nodes for Hypebridge Apify actors - event scrapers, influencer tools, and more",
+  "version": "2.20.1",
+  "description": "n8n community nodes for 40+ Hypebridge Apify actors — Temu, Amazon, Eventbrite, Luma, Spotify, UltraSignup, influencer marketing, B2B leads, and more",
   "keywords": [
     "n8n-community-node-package",
     "n8n-nodes",
-    "n8n"
+    "n8n",
+    "apify",
+    "web-scraping",
+    "temu",
+    "eventbrite",
+    "luma",
+    "amazon",
+    "spotify",
+    "influencer-marketing",
+    "ecommerce",
+    "lead-generation"
   ],
   "license": "MIT",
   "repository": {
@@ -28,7 +38,8 @@
     "lint:fix": "n8n-node lint --fix",
     "merge:api": "npx openapi-merge-cli --config ./openapi.config.json",
     "test": "WEBHOOK_URL=https://localhost:5678 jest --config jest.config.js",
-    "create-actor-app": "npx tsx scripts/cli.ts"
+    "create-actor-app": "npx tsx scripts/cli.ts",
+    "affiliate:apply": "npx tsx scripts/applyAffiliate.ts"
   },
   "files": [
     "dist"
