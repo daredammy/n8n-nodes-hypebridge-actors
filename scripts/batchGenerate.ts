@@ -53,6 +53,7 @@ const ACTORS = [
   { id: 'CmrJzJZBXNVU5s3Q8', name: 'xceed-events-scraper' },
   { id: 'm4VEznf54AHIXHHQR', name: 'fever-events-scraper' },
   { id: 'nUEb7Ln84LTvzTfEe', name: 'us-grocery-price-comparator' },
+  { id: 'dhQejS3qhQVDjljej', name: 'ultrasignup-race-scraper' },
 ];
 
 const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors';
