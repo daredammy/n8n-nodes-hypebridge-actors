@@ -18,8 +18,8 @@ export const ClassNameCamel = 'apifyUsGroceryPriceComparator' as string;
 export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = 'nUEb7Ln84LTvzTfEe' as string;
 
-export const DISPLAY_NAME = 'US Grocery Price Comparator - Walmart vs Target' as string;
-export const DESCRIPTION = 'Run the US Grocery Price Comparator - Walmart vs Target Actor on Apify' as string;
+export const DISPLAY_NAME = 'US Grocery Price Comparator' as string;
+export const DESCRIPTION = 'Compare grocery staple prices across 11 major US chains (Walmart, Target, Kroger & affiliates), normalized to unit prices ($/fl oz, $/oz, $/lb, $/count). Features store-brand equivalence, promo vs. regular price separation, private-label margin metrics, and a Whole-Basket Optimizer.' as string;
 
 export class ApifyUsGroceryPriceComparator implements INodeType {
 	description: INodeTypeDescription = {

@@ -1,5 +1,12 @@
 import { IExecuteFunctions, INodeProperties } from 'n8n-workflow';
 
+function getDateParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
+	if (value === undefined || value === null || value === '') return {};
+	const date = String(value).slice(0, 10);
+	return { [paramName]: date };
+}
+
 function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
 	const value = context.getNodeParameter(paramName, itemIndex, undefined);
 	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
@@ -28,6 +35,14 @@ export function buildActorInput(
 		childRunTimeoutSecs: context.getNodeParameter('childRunTimeoutSecs', itemIndex, 240),
 		// Debug mode (debugMode)
 		debugMode: context.getNodeParameter('debugMode', itemIndex, false),
+		// Conference name (conferenceName)
+		...getOptionalParam(context, 'conferenceName', itemIndex),
+		// Extra context (conferenceContext)
+		...getOptionalParam(context, 'conferenceContext', itemIndex),
+		// Conference start date (conferenceStartDate)
+		...getDateParam(context, 'conferenceStartDate', itemIndex),
+		// Conference end date (conferenceEndDate)
+		...getDateParam(context, 'conferenceEndDate', itemIndex),
 	};
 }
 
@@ -121,7 +136,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Time window",
     "name": "timeWindow",
-    "description": "Filter events to a simple time window. Resolved to concrete start/end dates internally using the resolved city timezone.",
+    "description": "Filter events to a rolling time window measured from today in the resolved city's timezone: this_week is the next 7 days, this_month is the next 30 days (it does not end at the calendar month boundary), all applies no date filter.",
     "required": false,
     "default": "this_month",
     "type": "options",
@@ -253,6 +268,38 @@ export const actorProperties: INodeProperties[] = [
     "required": false,
     "default": false,
     "type": "boolean"
+  },
+  {
+    "displayName": "Conference name",
+    "name": "conferenceName",
+    "description": "Return only events that belong to this conference, such as its side events and official parties. Each event's title and description is matched to the conference with an LLM. Leave empty for a normal city search.",
+    "required": false,
+    "default": "SXSW",
+    "type": "string"
+  },
+  {
+    "displayName": "Extra context",
+    "name": "conferenceContext",
+    "description": "Optional hints for matching: the official hashtag, venue, website, or other names the conference goes by.",
+    "required": false,
+    "default": "",
+    "type": "string"
+  },
+  {
+    "displayName": "Conference start date",
+    "name": "conferenceStartDate",
+    "description": "First day to search (YYYY-MM-DD). Use with the end date to cover the conference week. Overrides the time window. Posh (and Eventbrite, when selected) only search the current month, so they are skipped when these dates fall outside it.",
+    "required": false,
+    "default": "",
+    "type": "dateTime"
+  },
+  {
+    "displayName": "Conference end date",
+    "name": "conferenceEndDate",
+    "description": "Last day to search (YYYY-MM-DD).",
+    "required": false,
+    "default": "",
+    "type": "dateTime"
   }
 ];
 

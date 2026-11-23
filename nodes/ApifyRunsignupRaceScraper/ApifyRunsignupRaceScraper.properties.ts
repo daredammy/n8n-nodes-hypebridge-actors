@@ -52,6 +52,8 @@ export function buildActorInput(
 		getSponsors: context.getNodeParameter('getSponsors', itemIndex, false),
 		// Race name contains (nameQuery)
 		...getOptionalParam(context, 'nameQuery', itemIndex),
+		// City (city)
+		...getOptionalParam(context, 'city', itemIndex),
 		// States / provinces (states)
 		...getFixedCollectionParam(context, 'states', itemIndex, 'values', 'mapValues'),
 		// Country (country)
@@ -161,6 +163,14 @@ export const actorProperties: INodeProperties[] = [
     "displayName": "Race name contains",
     "name": "nameQuery",
     "description": "Filter search inputs by race name.",
+    "required": false,
+    "default": "",
+    "type": "string"
+  },
+  {
+    "displayName": "City",
+    "name": "city",
+    "description": "Filter races by city name",
     "required": false,
     "default": "",
     "type": "string"

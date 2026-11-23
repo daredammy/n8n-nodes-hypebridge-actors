@@ -25,6 +25,11 @@ function getFixedCollectionParam(
 	return { [paramName]: result };
 }
 
+function getOptionalParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
+	const value = context.getNodeParameter(paramName, itemIndex, undefined);
+	return value !== undefined && value !== null && value !== '' ? { [paramName]: value } : {};
+}
+
 export function buildActorInput(
 	context: IExecuteFunctions,
 	itemIndex: number,
@@ -32,10 +37,14 @@ export function buildActorInput(
 ): Record<string, any> {
 	return {
 		...defaultInput,
+		// Start URL (url)
+		...getOptionalParam(context, 'url', itemIndex),
 		// Start URLs (startUrls)
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
 		// Marketplaces (marketplaces)
 		marketplaces: context.getNodeParameter('marketplaces', itemIndex, ["US"]),
+		// Product URLs (productUrls)
+		...getFixedCollectionParam(context, 'productUrls', itemIndex, 'values', 'mapValues'),
 		// Max products (maxItems)
 		maxItems: context.getNodeParameter('maxItems', itemIndex, 50),
 		// Get full product details (getProductDetails)
@@ -78,6 +87,14 @@ const authenticationProperties: INodeProperties[] = [
 ];
 
 export const actorProperties: INodeProperties[] = [
+  {
+    "displayName": "Start URL",
+    "name": "url",
+    "description": "Optional single Amazon search or product URL fallback.",
+    "required": false,
+    "default": "",
+    "type": "string"
+  },
   {
     "displayName": "Start URLs",
     "name": "startUrls",
@@ -204,6 +221,31 @@ export const actorProperties: INodeProperties[] = [
       {
         "name": "JP",
         "value": "JP"
+      }
+    ]
+  },
+  {
+    "displayName": "Product URLs",
+    "name": "productUrls",
+    "description": "Direct Amazon product page URLs. Use this simpler list for product-only batches; up to 50 URLs total across Start URLs and Product URLs.",
+    "required": false,
+    "default": {},
+    "type": "fixedCollection",
+    "typeOptions": {
+      "multipleValues": true
+    },
+    "options": [
+      {
+        "name": "values",
+        "displayName": "Values",
+        "values": [
+          {
+            "displayName": "Value",
+            "name": "value",
+            "type": "string",
+            "default": ""
+          }
+        ]
       }
     ]
   },

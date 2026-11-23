@@ -48,6 +48,8 @@ export function buildActorInput(
 		...getFixedCollectionParam(context, 'startUrls', itemIndex, 'items', 'passthrough'),
 		// Max events (maxEvents)
 		maxEvents: context.getNodeParameter('maxEvents', itemIndex, 100),
+		// Skip events (skipEvents)
+		skipEvents: context.getNodeParameter('skipEvents', itemIndex, 0),
 		// Get event details (getEventDetails)
 		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex, false),
 		// Max concurrency (maxConcurrency)
@@ -115,6 +117,17 @@ export const actorProperties: INodeProperties[] = [
     "description": "Maximum number of unique events to extract across all start URLs. Search and group pagination stops once this cap is reached. Use 0 for no limit.",
     "required": false,
     "default": 100,
+    "type": "number",
+    "typeOptions": {
+      "minValue": 0
+    }
+  },
+  {
+    "displayName": "Skip events",
+    "name": "skipEvents",
+    "description": "Number of events to skip before collecting/charging (useful for cursor offset)",
+    "required": false,
+    "default": 0,
     "type": "number",
     "typeOptions": {
       "minValue": 0

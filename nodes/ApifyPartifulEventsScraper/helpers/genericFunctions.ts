@@ -86,7 +86,9 @@ export async function pollRunStatus(
 	runId: string,
 ): Promise<any> {
 	let lastRunData: any;
+	const deadline = Date.now() + 35 * 60 * 1000;
 	while (true) {
+		if (Date.now() >= deadline) throw new NodeApiError(this.getNode(), {message: 'Actor polling exceeded 35 minutes; check its run in Apify Console'});
 		try {
 			const pollResult = await apiRequest.call(this, {
 				method: 'GET',

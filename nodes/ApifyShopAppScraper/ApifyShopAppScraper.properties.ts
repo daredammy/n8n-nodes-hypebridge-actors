@@ -161,9 +161,9 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Proxy configuration",
     "name": "proxyConfiguration",
-    "description": "Optional proxy settings. Start without a proxy and add residential proxies only if the site begins blocking your runs.",
+    "description": "Apify RESIDENTIAL proxy (US) by default. Without a proxy (platform datacenter IP) Shop.com did not issue a search session in testing, so every search failed.",
     "required": false,
-    "default": "{\"useApifyProxy\":false}",
+    "default": "{\"useApifyProxy\":true,\"apifyProxyGroups\":[\"RESIDENTIAL\"],\"apifyProxyCountry\":\"US\"}",
     "type": "json"
   }
 ];

@@ -25,18 +25,6 @@ function getFixedCollectionParam(
 	return { [paramName]: result };
 }
 
-function getJsonParam(context: IExecuteFunctions, paramName: string, itemIndex: number): Record<string, any> {
-	try {
-		const rawValue = context.getNodeParameter(paramName, itemIndex, undefined);
-		if (rawValue === undefined || rawValue === null || rawValue === '' || (typeof rawValue === 'string' && rawValue.trim() === '')) {
-			return {};
-		}
-		return { [paramName]: typeof rawValue === 'string' ? JSON.parse(rawValue) : rawValue };
-	} catch (error) {
-		throw new Error(`Invalid JSON in parameter "${paramName}": ${(error as Error).message}`);
-	}
-}
-
 export function buildActorInput(
 	context: IExecuteFunctions,
 	itemIndex: number,
@@ -50,14 +38,18 @@ export function buildActorInput(
 		maxItems: context.getNodeParameter('maxItems', itemIndex, 100),
 		// Scrape Full Post Details (scrapePostsFromLists)
 		scrapePostsFromLists: context.getNodeParameter('scrapePostsFromLists', itemIndex, false),
-		// Scrape Comments (scrapeComments)
+		// Include Public Comments (scrapeComments)
 		scrapeComments: context.getNodeParameter('scrapeComments', itemIndex, false),
 		// Max Comments per Post (maxComments)
 		maxComments: context.getNodeParameter('maxComments', itemIndex, 10),
 		// Debug Mode (debugMode)
 		debugMode: context.getNodeParameter('debugMode', itemIndex, false),
-		// Proxy Configuration (proxyConfiguration)
-		...getJsonParam(context, 'proxyConfiguration', itemIndex),
+		// Maximum Feed Pages per Start URL (maxPages)
+		maxPages: context.getNodeParameter('maxPages', itemIndex, 20),
+		// Maximum Comment Pages per Post (maxCommentPages)
+		maxCommentPages: context.getNodeParameter('maxCommentPages', itemIndex, 10),
+		// Maximum Parallel Requests (maxConcurrency)
+		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex, 3),
 	};
 }
 
@@ -85,7 +77,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Start URLs",
     "name": "startUrls",
-    "description": "URLs to scrape from TeamBlind. Supports post lists (/?sort=pop, /?sort=id, /channels/*, /company/*) and individual post pages (/post/*).",
+    "description": "English TeamBlind public feeds, channels, company discussions, keyword search or /post/ URLs on teamblind.com or www.teamblind.com. Direct post URLs always receive details. Up to 100 start URLs. Private groups and localized market URLs are unsupported and skipped with a warning.",
     "required": true,
     "default": {},
     "type": "fixedCollection",
@@ -110,7 +102,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Max Items",
     "name": "maxItems",
-    "description": "Maximum number of posts to scrape. Set to 0 for unlimited.",
+    "description": "Maximum delivered posts across the run, capped at 10,000. For compatibility, 0 uses the 10,000-post safety cap.",
     "required": false,
     "default": 100,
     "type": "number",
@@ -122,15 +114,15 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Scrape Full Post Details",
     "name": "scrapePostsFromLists",
-    "description": "When enabled, follows each post link from list pages to scrape full content and poll data. Additional pay-per-event charges apply.",
+    "description": "Follow post links from feed, company, channel and search pages to extract the full available post text and public poll data. The post is delivered once. Direct post URLs always receive detail extraction.",
     "required": false,
     "default": false,
     "type": "boolean"
   },
   {
-    "displayName": "Scrape Comments",
+    "displayName": "Include Public Comments",
     "name": "scrapeComments",
-    "description": "When enabled, extracts comments from post detail pages. Disabling this significantly improves speed.",
+    "description": "Include available public comments on post detail pages, up to Max comments per post. Enable full details when starting from a feed. Login-restricted comments and replies may be unavailable.",
     "required": false,
     "default": false,
     "type": "boolean"
@@ -138,7 +130,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Max Comments per Post",
     "name": "maxComments",
-    "description": "Maximum number of comments to extract per post. Set to 0 for all comments.",
+    "description": "Maximum public comments per post, capped at 100. For compatibility, 0 uses the 100-comment safety cap. The source may expose fewer comments than its displayed total.",
     "required": false,
     "default": 10,
     "type": "number",
@@ -150,18 +142,46 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Debug Mode",
     "name": "debugMode",
-    "description": "When enabled, saves screenshots and HTML to Key-Value Store on extraction failures for troubleshooting.",
+    "description": "Save at most two diagnostic HTML snippets, each capped at 200,000 characters, when extraction cannot complete.",
     "required": false,
     "default": false,
     "type": "boolean"
   },
   {
-    "displayName": "Proxy Configuration",
-    "name": "proxyConfiguration",
-    "description": "Proxy settings. TeamBlind requires residential proxies to avoid blocks.",
+    "displayName": "Maximum Feed Pages per Start URL",
+    "name": "maxPages",
+    "description": "Stop after this many public feed, company, channel or search pages per start URL, or sooner when Max items is reached or no more public pages are available. Collected results are kept if another page is refused.",
     "required": false,
-    "default": "{\"useApifyProxy\":true,\"apifyProxyGroups\":[\"RESIDENTIAL\"],\"apifyProxyCountry\":\"US\"}",
-    "type": "json"
+    "default": 20,
+    "type": "number",
+    "typeOptions": {
+      "minValue": 1,
+      "maxValue": 100
+    }
+  },
+  {
+    "displayName": "Maximum Comment Pages per Post",
+    "name": "maxCommentPages",
+    "description": "Maximum additional public comment pages per post, when the source exposes them. Stop sooner at Max comments. If another page is refused, available comments are kept; signed-in comments may remain inaccessible.",
+    "required": false,
+    "default": 10,
+    "type": "number",
+    "typeOptions": {
+      "minValue": 1,
+      "maxValue": 20
+    }
+  },
+  {
+    "displayName": "Maximum Parallel Requests",
+    "name": "maxConcurrency",
+    "description": "Limit requests processed at once. Lower this value when the site is limiting requests.",
+    "required": false,
+    "default": 3,
+    "type": "number",
+    "typeOptions": {
+      "minValue": 1,
+      "maxValue": 10
+    }
   }
 ];
 

@@ -54,6 +54,7 @@ const ACTORS = [
   { id: 'm4VEznf54AHIXHHQR', name: 'fever-events-scraper' },
   { id: 'nUEb7Ln84LTvzTfEe', name: 'us-grocery-price-comparator' },
   { id: 'dhQejS3qhQVDjljej', name: 'ultrasignup-race-scraper' },
+  { id: '0F1xdFfKoTkW4FfGK', name: 'gem-mkp-l1-product-price-monitor' },
 ];
 
 const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors';

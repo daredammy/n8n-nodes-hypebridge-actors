@@ -67,7 +67,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Start URLs",
     "name": "startUrls",
-    "description": "Temu product, category or homepage URLs. Keyword search URLs are not supported and will be rejected - browse by category instead. Store/merchant pages are not supported.",
+    "description": "Temu product, category, subject landing page or homepage URLs. Collections/channels (including Best Sellers and Lightning Deals), keyword search and store/merchant pages are unavailable and diagnosed before extraction.",
     "required": false,
     "default": {},
     "type": "fixedCollection",

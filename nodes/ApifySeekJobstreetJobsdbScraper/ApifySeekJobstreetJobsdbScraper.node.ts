@@ -19,7 +19,7 @@ export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = 'R64PYvu1zKMHv2l6g' as string;
 
 export const DISPLAY_NAME = 'SEEK, JobStreet & JobsDB Jobs Scraper' as string;
-export const DESCRIPTION = 'Run the SEEK, JobStreet & JobsDB Jobs Scraper Actor on Apify' as string;
+export const DESCRIPTION = 'Find hiring companies across 8 SEEK, JobStreet and JobsDB markets. Export job descriptions, available company domains, industries, employee bands, applicant insights and public emails with context. Build prospect lists and job feeds from keywords, search, company or job URLs.' as string;
 
 export class ApifySeekJobstreetJobsdbScraper implements INodeType {
 	description: INodeTypeDescription = {

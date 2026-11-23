@@ -69,7 +69,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Start URLs",
     "name": "startUrls",
-    "description": "Escort Alligator city listing or individual listing-detail URLs. Invalid or unsupported individual entries are skipped; only escortalligator.com.listcrawler.eu URLs are collected.",
+    "description": "Escort Alligator city listing or individual listing-detail URLs, including legacy paths without a state segment. Invalid or unsupported individual entries are skipped; only escortalligator.com.listcrawler.eu URLs are collected.",
     "required": true,
     "default": {},
     "type": "fixedCollection",

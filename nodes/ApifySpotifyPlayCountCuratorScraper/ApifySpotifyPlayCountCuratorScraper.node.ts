@@ -19,7 +19,7 @@ export const X_PLATFORM_HEADER_ID = 'n8n' as string;
 export const X_PLATFORM_APP_HEADER_ID = 'abco332ezOfpsrynV' as string;
 
 export const DISPLAY_NAME = 'Spotify Play Counts, Preview URLs & Curator Contacts' as string;
-export const DESCRIPTION = 'Spotify play counts, artist listener cities, previews and public playlist curator contacts.' as string;
+export const DESCRIPTION = 'Spotify play counts, playlist BPM and musical keys, artist socials and top tracks, artwork, previews and public curator contacts.' as string;
 
 export class ApifySpotifyPlayCountCuratorScraper implements INodeType {
 	description: INodeTypeDescription = {

@@ -68,7 +68,7 @@ export const actorProperties: INodeProperties[] = [
   {
     "displayName": "Influencer Handle (Optional if Evaluation ID is provided)",
     "name": "influencerHandle",
-    "description": "Social media handle (e.g., 'natgeo' or '@natgeo'). Required if Evaluation ID is not provided.",
+    "description": "Social media handle (e.g., 'natgeo' or '@natgeo') or profile URL. Required if Evaluation ID is not provided.",
     "required": false,
     "default": "natgeo",
     "type": "string"

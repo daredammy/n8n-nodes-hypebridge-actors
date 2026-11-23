@@ -1,7 +1,7 @@
 {
   "name": "n8n-nodes-hypebridge-actors",
   "version": "2.20.1",
-  "description": "n8n community nodes for 40+ Hypebridge Apify actors — Temu, Amazon, Eventbrite, Luma, Spotify, UltraSignup, influencer marketing, B2B leads, and more",
+  "description": "n8n community nodes for Hypebridge Apify actors - event scrapers, influencer tools, and more",
   "keywords": [
     "n8n-community-node-package",
     "n8n-nodes",
@@ -51,6 +51,8 @@
       "dist/credentials/ApifyOAuth2Api.credentials.js"
     ],
     "nodes": [
+      "dist/nodes/ApifySpotifyPlayCountCuratorScraper/ApifySpotifyPlayCountCuratorScraper.node.js",
+      "dist/nodes/ApifySeekJobstreetJobsdbScraper/ApifySeekJobstreetJobsdbScraper.node.js",
       "dist/nodes/ApifyFindEvents/ApifyFindEvents.node.js",
       "dist/nodes/ApifyEventbriteSearch/ApifyEventbriteSearch.node.js",
       "dist/nodes/ApifyDraftkingsPredictions/ApifyDraftkingsPredictions.node.js",
@@ -90,9 +92,8 @@
       "dist/nodes/ApifyXceedEventsScraper/ApifyXceedEventsScraper.node.js",
       "dist/nodes/ApifyFeverEventsScraper/ApifyFeverEventsScraper.node.js",
       "dist/nodes/ApifyUsGroceryPriceComparator/ApifyUsGroceryPriceComparator.node.js",
-      "dist/nodes/ApifySeekJobstreetJobsdbScraper/ApifySeekJobstreetJobsdbScraper.node.js",
-      "dist/nodes/ApifySpotifyPlayCountCuratorScraper/ApifySpotifyPlayCountCuratorScraper.node.js",
-      "dist/nodes/ApifyUltrasignupRaceScraper/ApifyUltrasignupRaceScraper.node.js"
+      "dist/nodes/ApifyUltrasignupRaceScraper/ApifyUltrasignupRaceScraper.node.js",
+      "dist/nodes/ApifyGemMkpL1ProductPriceMonitor/ApifyGemMkpL1ProductPriceMonitor.node.js"
     ]
   },
   "peerDependencies": {
