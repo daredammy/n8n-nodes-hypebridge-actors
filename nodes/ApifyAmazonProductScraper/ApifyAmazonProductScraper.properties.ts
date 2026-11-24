@@ -57,6 +57,8 @@ export function buildActorInput(
 		maxPages: context.getNodeParameter('maxPages', itemIndex, 5),
 		// Include sponsored results (includeSponsored)
 		includeSponsored: context.getNodeParameter('includeSponsored', itemIndex, true),
+		// Skip markets that return no prices (skipLowYieldMarkets)
+		skipLowYieldMarkets: context.getNodeParameter('skipLowYieldMarkets', itemIndex, true),
 		// Max concurrency (maxConcurrency)
 		maxConcurrency: context.getNodeParameter('maxConcurrency', itemIndex, 2),
 		// Max page requests (maxRequests)
@@ -335,6 +337,14 @@ export const actorProperties: INodeProperties[] = [
     "displayName": "Include sponsored results",
     "name": "includeSponsored",
     "description": "Off: skip products that appear only as ads. Products that also appear organically are always kept.",
+    "required": false,
+    "default": true,
+    "type": "boolean"
+  },
+  {
+    "displayName": "Skip markets that return no prices",
+    "name": "skipLowYieldMarkets",
+    "description": "On: for ASIN and product URL lookups, stop opening product pages in a marketplace once at least 10 pages came back and 10% or fewer had a price (the product is usually not sold there). Unpriced records are free but still cost a page request each. Skipped lookups return no record and are counted in the SUMMARY. Off: always open every page.",
     "required": false,
     "default": true,
     "type": "boolean"

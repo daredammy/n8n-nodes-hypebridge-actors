@@ -55,6 +55,7 @@ const ACTORS = [
   { id: 'nUEb7Ln84LTvzTfEe', name: 'us-grocery-price-comparator' },
   { id: 'dhQejS3qhQVDjljej', name: 'ultrasignup-race-scraper' },
   { id: '0F1xdFfKoTkW4FfGK', name: 'gem-mkp-l1-product-price-monitor' },
+  { id: 's2bk8spIxRn9Z9Byp', name: 'bandsintown-events' },
 ];
 
 const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors';
