@@ -49,7 +49,7 @@ export function buildActorInput(
 		// Max events (maxEvents)
 		maxEvents: context.getNodeParameter('maxEvents', itemIndex, 100),
 		// Get full event details (getEventDetails)
-		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex, false),
+		getEventDetails: context.getNodeParameter('getEventDetails', itemIndex, true),
 		// City / location (location)
 		...getOptionalParam(context, 'location', itemIndex),
 		// Artist or venue search (searchQuery)
@@ -136,7 +136,7 @@ export const actorProperties: INodeProperties[] = [
     "name": "getEventDetails",
     "description": "Visit each event page to enrich records with direct ticket vendor URLs, venue street address & coordinates, genres, and artist social links. Direct /e/ URLs in Start URLs always return full details.",
     "required": false,
-    "default": false,
+    "default": true,
     "type": "boolean"
   },
   {

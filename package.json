@@ -94,7 +94,8 @@
       "dist/nodes/ApifyUsGroceryPriceComparator/ApifyUsGroceryPriceComparator.node.js",
       "dist/nodes/ApifyUltrasignupRaceScraper/ApifyUltrasignupRaceScraper.node.js",
       "dist/nodes/ApifyGemMkpL1ProductPriceMonitor/ApifyGemMkpL1ProductPriceMonitor.node.js",
-      "dist/nodes/ApifyBandsintownEvents/ApifyBandsintownEvents.node.js"
+      "dist/nodes/ApifyBandsintownEvents/ApifyBandsintownEvents.node.js",
+      "dist/nodes/ApifyBstockLiquidationAuctionMonitor/ApifyBstockLiquidationAuctionMonitor.node.js"
     ]
   },
   "peerDependencies": {

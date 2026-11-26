@@ -56,6 +56,7 @@ const ACTORS = [
   { id: 'dhQejS3qhQVDjljej', name: 'ultrasignup-race-scraper' },
   { id: '0F1xdFfKoTkW4FfGK', name: 'gem-mkp-l1-product-price-monitor' },
   { id: 's2bk8spIxRn9Z9Byp', name: 'bandsintown-events' },
+  { id: 'zvvW8eaZSGbFn1hVL', name: 'bstock-liquidation-auction-monitor' },
 ];
 
 const PACKAGE_NAME = 'n8n-nodes-hypebridge-actors';

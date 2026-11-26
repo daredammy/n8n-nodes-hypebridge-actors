@@ -1,0 +1,23 @@
+{
+  "node": "n8n-nodes-base.apifyBstockLiquidationAuctionMonitor",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Data & Storage",
+    "Marketing & Content"
+  ],
+  "resources": {
+    "primaryDocumentation": [
+      {
+        "url": "https://apify.com/hypebridge/bstock-liquidation-auction-monitor"
+      }
+    ]
+  },
+  "alias": [
+    "bstock liquidation auction monitor",
+    "apify",
+    "scraper",
+    "automation",
+    "hypebridge"
+  ]
+}
